@@ -13,47 +13,43 @@ app.use(express.static("public"));
 let players = {};
 
 io.on("connection", (socket) => {
+  console.log("Player connected:", socket.id);
 
-  socket.on("login", (name) => {
+  // Tạo player mới
+  players[socket.id] = {
+    id: socket.id,
+    x: Math.random() * 500,
+    y: Math.random() * 500,
+    color: "#" + Math.floor(Math.random()*16777215).toString(16)
+  };
 
-    // map tên thành 1 trong 15 char
-    const charId = hashName(name) % 15;
+  // Gửi toàn bộ player hiện tại cho người mới
+  socket.emit("currentPlayers", players);
 
-    players[socket.id] = {
-      id: socket.id,
-      name,
-      charId,
-      x: Math.random() * 2000,
-      y: Math.random() * 2000
-    };
+  // Thông báo cho người khác có player mới
+  socket.broadcast.emit("newPlayer", players[socket.id]);
 
-    socket.emit("currentPlayers", players);
-    socket.broadcast.emit("newPlayer", players[socket.id]);
-  });
+  socket.on("move", (key) => {
+    let player = players[socket.id];
+    if (!player) return;
 
-  socket.on("move", (data) => {
-    if (players[socket.id]) {
-      players[socket.id].x = data.x;
-      players[socket.id].y = data.y;
-      io.emit("playerMoved", players[socket.id]);
-    }
+    const speed = 5;
+
+    if (key === "ArrowUp") player.y -= speed;
+    if (key === "ArrowDown") player.y += speed;
+    if (key === "ArrowLeft") player.x -= speed;
+    if (key === "ArrowRight") player.x += speed;
+
+    io.emit("playerMoved", player);
   });
 
   socket.on("disconnect", () => {
+    console.log("Player disconnected:", socket.id);
     delete players[socket.id];
     io.emit("playerDisconnected", socket.id);
   });
-
 });
 
-function hashName(name) {
-  let hash = 0;
-  for (let i = 0; i < name.length; i++) {
-    hash += name.charCodeAt(i);
-  }
-  return hash;
-}
-
 server.listen(PORT, () => {
-  console.log("Server running");
+  console.log("Server running on port", PORT);
 });
