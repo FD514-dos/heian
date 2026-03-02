@@ -7,30 +7,51 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 const PORT = process.env.PORT || 3000;
-
 app.use(express.static("public"));
+
+const allowedNames = [
+"Fyodor Dostoyevsky Ori",
+"Fyodor Dostoyevsky Beast",
+"Nikolai Gogol",
+"Dazai Osamu",
+"Kouyou Ozaki",
+"Agatha Christie",
+"Edogawa Ranpo",
+"Francis Fitzgerlard",
+"Izumi Kyouka",
+"Ayatsuji Yukito",
+"Jikoyuu Suisen",
+"Van",
+"Nakahara Chuuya",
+"Shibusawa Tatsuhiko",
+"Oda Sakunosuke"
+];
 
 let players = {};
 
 io.on("connection", (socket) => {
-  console.log("Player connected:", socket.id);
 
-  // Tạo player mới
-  players[socket.id] = {
-    id: socket.id,
-    x: Math.random() * 500,
-    y: Math.random() * 500,
-    color: "#" + Math.floor(Math.random()*16777215).toString(16)
-  };
+  socket.on("login", (name) => {
 
-  // Gửi toàn bộ player hiện tại cho người mới
-  socket.emit("currentPlayers", players);
+    if (!allowedNames.includes(name)) {
+      socket.emit("loginFailed");
+      return;
+    }
 
-  // Thông báo cho người khác có player mới
-  socket.broadcast.emit("newPlayer", players[socket.id]);
+    players[socket.id] = {
+      id: socket.id,
+      name: name,
+      x: Math.random() * 500,
+      y: Math.random() * 500,
+      color: "#" + Math.floor(Math.random()*16777215).toString(16)
+    };
+
+    socket.emit("loginSuccess", socket.id);
+    io.emit("updatePlayers", players);
+  });
 
   socket.on("move", (key) => {
-    let player = players[socket.id];
+    const player = players[socket.id];
     if (!player) return;
 
     const speed = 5;
@@ -40,16 +61,15 @@ io.on("connection", (socket) => {
     if (key === "ArrowLeft") player.x -= speed;
     if (key === "ArrowRight") player.x += speed;
 
-    io.emit("playerMoved", player);
+    io.emit("updatePlayers", players);
   });
 
   socket.on("disconnect", () => {
-    console.log("Player disconnected:", socket.id);
     delete players[socket.id];
-    io.emit("playerDisconnected", socket.id);
+    io.emit("updatePlayers", players);
   });
 });
 
 server.listen(PORT, () => {
-  console.log("Server running on port", PORT);
+  console.log("Server running");
 });
