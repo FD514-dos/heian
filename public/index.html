@@ -38,7 +38,7 @@ body {
 
 canvas {
   display: none;
-  background: white;
+  background: #111;
 }
 </style>
 </head>
@@ -74,61 +74,6 @@ let myId = null;
 const mapWidth = 4000;
 const mapHeight = 4000;
 
-const PLAYER_SIZE = 40;
-const ZOOM = 0.8; // zoom nhỏ lại
-
-/* =============================
-   KIẾN TRÚC PIXEL
-============================= */
-
-const TILE = 12;
-
-const daiDairi = [
-"000000222222222222000000",
-"000022222222222222220000",
-"000222222222222222222000",
-"002221111111111111122200",
-"022211111111111111111220",
-"022211333333333333111220",
-"222213333333333333331222",
-"222213333333333333331222",
-"222213333333333333331222",
-"022211111111111111111220",
-"002221111111111111122200",
-"000222222222222222222000",
-"000022222222222222220000",
-"000000222222222222000000"
-];
-
-function drawDaiDairi() {
-
-  const startX = 1700;
-  const startY = 300;
-
-  for (let row = 0; row < daiDairi.length; row++) {
-    for (let col = 0; col < daiDairi[row].length; col++) {
-
-      const tile = daiDairi[row][col];
-      if (tile === "0") continue;
-
-      if (tile === "1") ctx.fillStyle = "#5a3a1e";
-      if (tile === "2") ctx.fillStyle = "#3b2b4f";
-      if (tile === "3") ctx.fillStyle = "#8b6f47";
-
-      ctx.fillRect(
-        startX + col * TILE,
-        startY + row * TILE,
-        TILE,
-        TILE
-      );
-    }
-  }
-}
-
-/* =============================
-   LOGIN
-============================= */
-
 function login() {
   const name = document.getElementById("nameInput").value.trim();
   socket.emit("login", name);
@@ -154,37 +99,11 @@ socket.on("updatePlayers", (serverPlayers) => {
   players = serverPlayers;
 });
 
-/* =============================
-   INPUT FIX 4 HƯỚNG
-============================= */
-
-const keys = {};
-
 document.addEventListener("keydown", (e) => {
-  keys[e.key] = true;
+  socket.emit("move", e.key);
 });
-
-document.addEventListener("keyup", (e) => {
-  keys[e.key] = false;
-});
-
-function handleMovement() {
-  if (!players[myId]) return;
-
-  if (keys["ArrowUp"]) socket.emit("move", "ArrowUp");
-  if (keys["ArrowDown"]) socket.emit("move", "ArrowDown");
-  if (keys["ArrowLeft"]) socket.emit("move", "ArrowLeft");
-  if (keys["ArrowRight"]) socket.emit("move", "ArrowRight");
-}
-
-/* =============================
-   DRAW GAME
-============================= */
 
 function draw() {
-
-  handleMovement();
-
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   if (!players[myId]) {
@@ -194,35 +113,28 @@ function draw() {
 
   const me = players[myId];
 
-  const camX = me.x - (canvas.width / ZOOM) / 2;
-  const camY = me.y - (canvas.height / ZOOM) / 2;
+  // ===== CAMERA =====
+  const camX = me.x - canvas.width / 2;
+  const camY = me.y - canvas.height / 2;
 
   ctx.save();
-  ctx.scale(ZOOM, ZOOM);
   ctx.translate(-camX, -camY);
 
-  // NỀN TRẮNG
-  ctx.fillStyle = "#ffffff";
+  // ===== MAP (đen trắng) =====
+  ctx.fillStyle = "#222";
   ctx.fillRect(0, 0, mapWidth, mapHeight);
 
-  // ĐƯỜNG ĐÁ CHỈ BẮT ĐẦU PHÍA TRƯỚC PLAYER
-  ctx.fillStyle = "#bcbcbc";
-  ctx.fillRect(1920, 0, 160, 3500); // chỉ từ Bắc đến vị trí spawn
-
-  // KIẾN TRÚC CUỐI ĐƯỜNG
-  drawDaiDairi();
-
-  // PLAYER
+  // ===== PLAYERS =====
   for (let id in players) {
     const p = players[id];
 
     ctx.fillStyle = p.color;
-    ctx.fillRect(p.x, p.y, PLAYER_SIZE, PLAYER_SIZE);
+    ctx.fillRect(p.x, p.y, 40, 40);
 
-    ctx.fillStyle = "black";
+    ctx.fillStyle = "white";
     ctx.font = "14px Arial";
     ctx.textAlign = "center";
-    ctx.fillText(p.name, p.x + PLAYER_SIZE/2, p.y - 8);
+    ctx.fillText(p.name, p.x + 20, p.y - 8);
   }
 
   ctx.restore();
