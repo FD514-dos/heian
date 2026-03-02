@@ -41,8 +41,8 @@ io.on("connection", (socket) => {
     players[socket.id] = {
       id: socket.id,
       name: name,
-      x: Math.random() * 500,
-      y: Math.random() * 500,
+      x: 2000,
+y: 2000,
       color: "#" + Math.floor(Math.random()*16777215).toString(16)
     };
 
