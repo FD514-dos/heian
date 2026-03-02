@@ -1,68 +1,99 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Heian MMO</title>
-  <style>
-    body {
-      margin: 0;
-      overflow: hidden;
-      background: #111;
-    }
-    canvas {
-      display: block;
-      background: #222;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Heian MMO</title>
+<style>
+body {
+  margin: 0;
+  background: black;
+  overflow: hidden;
+  color: white;
+  font-family: Arial;
+}
+
+#loginScreen {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: black;
+}
+
+#game {
+  display: none;
+  background: #111;
+}
+</style>
 </head>
 <body>
+
+<div id="loginScreen">
+  <div>
+    <h2>Enter your name</h2>
+    <input id="nameInput" type="text" />
+    <button onclick="login()">Enter</button>
+  </div>
+</div>
 
 <canvas id="game"></canvas>
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
-  const socket = io();
-  const canvas = document.getElementById("game");
-  const ctx = canvas.getContext("2d");
+const socket = io();
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+let players = {};
+let myId = null;
 
-  let players = {};
+function login() {
+  const name = document.getElementById("nameInput").value.trim();
+  socket.emit("login", name);
+}
 
-  socket.on("currentPlayers", (serverPlayers) => {
-    players = serverPlayers;
-  });
+socket.on("loginSuccess", (id) => {
+  myId = id;
+  document.getElementById("loginScreen").style.display = "none";
+  canvas.style.display = "block";
+});
 
-  socket.on("newPlayer", (player) => {
-    players[player.id] = player;
-  });
+socket.on("loginFailed", () => {
+  alert("Name not allowed!");
+});
 
-  socket.on("playerMoved", (player) => {
-    players[player.id] = player;
-  });
+socket.on("updatePlayers", (serverPlayers) => {
+  players = serverPlayers;
+});
 
-  socket.on("playerDisconnected", (id) => {
-    delete players[id];
-  });
+document.addEventListener("keydown", (e) => {
+  socket.emit("move", e.key);
+});
 
-  document.addEventListener("keydown", (e) => {
-    socket.emit("move", e.key);
-  });
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (let id in players) {
+    const p = players[id];
 
-    for (let id in players) {
-      let p = players[id];
-      ctx.fillStyle = p.color || "white";
-      ctx.fillRect(p.x, p.y, 20, 20);
-    }
+    ctx.fillStyle = p.color;
+    ctx.fillRect(p.x, p.y, 30, 30);
 
-    requestAnimationFrame(draw);
+    // Vẽ tên
+    ctx.fillStyle = "white";
+    ctx.font = "12px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText(p.name, p.x + 15, p.y - 5);
   }
 
-  draw();
+  requestAnimationFrame(draw);
+}
+
+draw();
 </script>
 
 </body>
