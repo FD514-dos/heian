@@ -70,7 +70,18 @@ canvas.height = window.innerHeight;
 
 let players = {};
 let myId = null;
+// ===== LOAD IMAGES =====
+const imgFront = new Image();
+imgFront.src = "../assets/fyodor_front.jpg";
 
+const imgBack = new Image();
+imgBack.src = "../assets/fyodor_back.jpg";
+
+const imgBack1 = new Image();
+imgBack1.src = "../assets/fyodor_back_walk_1.jpg";
+
+const imgBack2 = new Image();
+imgBack2.src = "../assets/fyodor_back_walk_2.jpg";
 const mapWidth = 4000;
 const mapHeight = 4000;
 
@@ -128,8 +139,7 @@ function draw() {
   for (let id in players) {
     const p = players[id];
 
-    ctx.fillStyle = p.color;
-    ctx.fillRect(p.x, p.y, 40, 40);
+   ctx.drawImage(imgFront, p.x, p.y, 40, 40);
 
     ctx.fillStyle = "white";
     ctx.font = "14px Arial";
