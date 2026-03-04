@@ -8,6 +8,7 @@ const io = new Server(server);
 
 const PORT = process.env.PORT || 3000;
 app.use(express.static("public"));
+app.use("/assets", express.static("assets"));
 
 const allowedNames = [
 "Fyodor Dostoyevsky Dead Apple",
