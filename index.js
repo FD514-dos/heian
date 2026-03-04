@@ -42,8 +42,8 @@ io.on("connection", (socket) => {
       id: socket.id,
       name: name,
       x: 2000,
-y: 2000,
-      color: "#" + Math.floor(Math.random()*16777215).toString(16)
+      y: 2000,
+      direction: "down", // 👈 THÊM DÒNG NÀY
     };
 
     socket.emit("loginSuccess", socket.id);
@@ -56,10 +56,25 @@ y: 2000,
 
     const speed = 5;
 
-    if (key === "ArrowUp") player.y -= speed;
-    if (key === "ArrowDown") player.y += speed;
-    if (key === "ArrowLeft") player.x -= speed;
-    if (key === "ArrowRight") player.x += speed;
+    if (key === "ArrowUp") {
+      player.y -= speed;
+      player.direction = "up";
+    }
+
+    if (key === "ArrowDown") {
+      player.y += speed;
+      player.direction = "down";
+    }
+
+    if (key === "ArrowLeft") {
+      player.x -= speed;
+      player.direction = "left";
+    }
+
+    if (key === "ArrowRight") {
+      player.x += speed;
+      player.direction = "right";
+    }
 
     io.emit("updatePlayers", players);
   });
