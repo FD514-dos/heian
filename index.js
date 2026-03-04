@@ -10,21 +10,21 @@ const PORT = process.env.PORT || 3000;
 app.use(express.static("public"));
 
 const allowedNames = [
-"Fyodor Dostoyevsky Ori",
-"Fyodor Dostoyevsky Beast",
-"Nikolai Gogol",
-"Dazai Osamu",
+"Fyodor Dostoyevsky Dead Apple",
+"Dazai Osamu Beast",
+"Nikolai Gogol Ori",
+"Dazai Osamu Ori",
 "Kouyou Ozaki",
 "Agatha Christie",
-"Edogawa Ranpo",
+"Edogawa Ranpo Ori",
 "Francis Fitzgerlard",
 "Izumi Kyouka",
 "Ayatsuji Yukito",
 "Jikoyuu Suisen",
 "Van",
-"Nakahara Chuuya",
+"Nakahara Chuuya Ori",
 "Shibusawa Tatsuhiko",
-"Oda Sakunosuke"
+"Oda Sakunosuke Beast"
 ];
 
 let players = {};
