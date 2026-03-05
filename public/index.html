@@ -145,7 +145,6 @@ socket.on("updatePlayers", (serverPlayers) => {
 canvas.addEventListener("keydown", (e) => {
   socket.emit("move", e.key);
 });
-
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -163,29 +162,34 @@ function draw() {
   ctx.save();
   ctx.translate(-camX, -camY);
 
-  // ===== MAP (đen trắng) =====
-  ctx.fillStyle = "#222";
+  // ===== MAP =====
+  ctx.fillStyle = "white";
   ctx.fillRect(0, 0, mapWidth, mapHeight);
+
+  // ===== GRASS =====
+  ctx.fillStyle = "#7ed957";
+
+  for (let g of grass) {
+    ctx.fillRect(g.x, g.y, 3, 3);
+  }
 
   // ===== PLAYERS =====
   for (let id in players) {
+
     const p = players[id];
-let img = imgFront;
+    let img = imgFront;
 
-if (p.y < players[myId].y) {
-  img = imgBack;
-}
+    // animation đơn giản
+    if (p.y < players[myId].y) {
+      img = walkFrame ? imgBack1 : imgBack2;
+    }
 
-if (p.y > players[myId].y) {
-  img = walkFrame ? imgBack1 : imgBack2;
-}
+    ctx.drawImage(img, p.x, p.y, 48, 48);
 
-ctx.drawImage(img, p.x, p.y, 48, 48);
-
-    ctx.fillStyle = "white";
+    ctx.fillStyle = "black";
     ctx.font = "14px Arial";
     ctx.textAlign = "center";
-    ctx.fillText(p.name, p.x + 20, p.y - 8);
+    ctx.fillText(p.name, p.x + 24, p.y - 8);
   }
 
   ctx.restore();
