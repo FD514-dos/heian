@@ -1,5 +1,8 @@
-const spawnX = 2000;
-const spawnY = 3400;
+spawnX = 2000
+spawnY = 3600
+
+spawnX = 2000
+spawnY = 3600
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
@@ -41,14 +44,13 @@ io.on("connection", (socket) => {
       return;
     }
 
-    players[socket.id] = {
-      id: socket.id,
-      name: name,
-      x: 2000,
-      y: 2000,
-      direction: "down", // 👈 THÊM DÒNG NÀY
-    };
-
+   players[socket.id] = {
+  id: socket.id,
+  name: name,
+  x: spawnX,
+  y: spawnY,
+  direction: "down",
+};
     socket.emit("loginSuccess", socket.id);
     io.emit("updatePlayers", players);
   });
