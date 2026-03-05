@@ -104,7 +104,13 @@ let myId = null;
 
 
 // ===== LOAD IMAGES =====
-const imgFront = new Image();
+const tree1 = new Image();
+tree1.src = "/assets/tree1.png";
+
+const tree2 = new Image();
+tree2.src = "/assets/tree2.png";
+  
+  const imgFront = new Image();
 imgFront.src = "../assets/fyodor_front.png";
 
 const imgBack = new Image();
@@ -118,8 +124,21 @@ imgBack2.src = "../assets/fyodor_back_walk_2.png";
   let walkFrame = 0;
 const mapWidth = 4000;
 const mapHeight = 4000;
+  const trees = [];
 
-const grass = [];
+for (let x = 300; x < 3700; x += 120) {
+  for (let y = 300; y < 1500; y += 120) {
+
+    trees.push({
+      x: x,
+      y: y,
+      frame: 0
+    });
+
+  }
+}
+  
+  const grass = [];
 
 for (let i = 0; i < 300; i++) {
   grass.push({
@@ -172,20 +191,27 @@ function draw() {
   ctx.save();
   ctx.translate(-camX, -camY);
 
-  // ===== MAP =====
-  // ===== MAP =====
 
 // nền trắng
 ctx.fillStyle = "white";
 ctx.fillRect(0, 0, mapWidth, mapHeight);
 
-// ===== FOREST =====
-ctx.fillStyle = "black";
+// ===== TREES =====
+trees.forEach(tree => {
 
-ctx.fillRect(200, 200, 800, 3600);   // rừng trái
-ctx.fillRect(3000, 200, 800, 3600);  // rừng phải
-ctx.fillRect(200, 200, 3600, 600);   // rừng trên
+  tree.frame += 0.05;
 
+  let img = Math.floor(tree.frame) % 2 === 0 ? tree1 : tree2;
+
+  ctx.drawImage(
+    img,
+    tree.x,
+    tree.y,
+    120,
+    120
+  );
+
+});
 // ===== ROAD =====
 ctx.fillStyle = "black";
 
