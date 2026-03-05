@@ -101,8 +101,7 @@ canvas.height = window.innerHeight;
 
 let players = {};
 let myId = null;
-  // ===== WALK ANIMATION =====
-let walkFrame = false;
+
 
 // ===== LOAD IMAGES =====
 const imgFront = new Image();
@@ -120,6 +119,14 @@ imgBack2.src = "../assets/fyodor_back_walk_2.png";
 const mapWidth = 4000;
 const mapHeight = 4000;
 
+const grass = [];
+
+for (let i = 0; i < 300; i++) {
+  grass.push({
+    x: Math.random() * mapWidth,
+    y: Math.random() * mapHeight
+  });
+}
 function login() {
   const name = document.getElementById("nameInput").value.trim();
   socket.emit("login", name);
@@ -169,39 +176,31 @@ function draw() {
   ctx.fillStyle = "white";
   ctx.fillRect(0, 0, mapWidth, mapHeight);
 // ===== GRASS =====
-const grass = [];
+ctx.fillStyle = "#7ed957";
 
-for (let i = 0; i < 300; i++) {
-  grass.push({
-    x: Math.random() * mapWidth,
-    y: Math.random() * mapHeight
-  });
+for (let g of grass) {
+  ctx.fillRect(g.x, g.y, 3, 3);
 }
-  // ===== GRASS =====
-  ctx.fillStyle = "#7ed957";
-
-  for (let g of grass) {
-    ctx.fillRect(g.x, g.y, 3, 3);
-  }
 
   // ===== PLAYERS =====
-  for (let id in players) {
+ // ===== PLAYERS =====
+for (let id in players) {
 
-    const p = players[id];
-    let img = imgFront;
-
+  const p = players[id];
+  let img = imgFront;
     // animation đơn giản
-if (p.y < me.y) {
-      img = walkFrame ? imgBack1 : imgBack2;
-    }
-
-    ctx.drawImage(img, p.x, p.y, 48, 48);
-
-    ctx.fillStyle = "black";
-    ctx.font = "14px Arial";
-    ctx.textAlign = "center";
-    ctx.fillText(p.name, p.x + 24, p.y - 8);
+  if (p.y < me.y) {
+    img = imgBack;
   }
+
+  ctx.drawImage(img, p.x, p.y, 48, 48);
+
+  ctx.fillStyle = "black";
+  ctx.font = "14px Arial";
+  ctx.textAlign = "center";
+  ctx.fillText(p.name, p.x + 24, p.y - 8);
+
+}
 
   ctx.restore();
 
