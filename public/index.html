@@ -173,8 +173,36 @@ function draw() {
   ctx.translate(-camX, -camY);
 
   // ===== MAP =====
-  ctx.fillStyle = "white";
-  ctx.fillRect(0, 0, mapWidth, mapHeight);
+  // ===== MAP =====
+
+// nền trắng
+ctx.fillStyle = "white";
+ctx.fillRect(0, 0, mapWidth, mapHeight);
+
+// ===== FOREST =====
+ctx.fillStyle = "black";
+
+ctx.fillRect(200, 200, 800, 3600);   // rừng trái
+ctx.fillRect(3000, 200, 800, 3600);  // rừng phải
+ctx.fillRect(200, 200, 3600, 600);   // rừng trên
+
+// ===== ROAD =====
+ctx.fillStyle = "black";
+
+// đường dọc
+ctx.fillRect(1950, 800, 100, 2500);
+
+// đường ngang
+ctx.fillRect(1500, 800, 1000, 100);
+
+// ===== PALACE =====
+ctx.fillStyle = "black";
+ctx.fillRect(1600, 200, 800, 600);
+
+// ===== TORII =====
+ctx.fillRect(1900, 3200, 200, 30);
+ctx.fillRect(1920, 3200, 20, 120);
+ctx.fillRect(2060, 3200, 20, 120);
 // ===== GRASS =====
 ctx.fillStyle = "#7ed957";
 
