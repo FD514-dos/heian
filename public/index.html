@@ -101,6 +101,12 @@ canvas.height = window.innerHeight;
 
 let players = {};
 let myId = null;
+  // ===== WALK ANIMATION =====
+let walkFrame = false;
+
+setInterval(() => {
+  walkFrame = !walkFrame;
+}, 200);
 // ===== LOAD IMAGES =====
 const imgFront = new Image();
 imgFront.src = "../assets/fyodor_front.png";
