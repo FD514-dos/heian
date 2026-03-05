@@ -1,3 +1,5 @@
+const spawnX = 2000;
+const spawnY = 3400;
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
