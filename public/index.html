@@ -64,6 +64,37 @@ canvas {
 const socket = io();
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
+  canvas.style.touchAction = "none";
+// ===== MOBILE CONTROL =====
+
+let touchMove = null;
+
+canvas.addEventListener("touchstart", (e) => {
+  const touch = e.touches[0];
+
+  const x = touch.clientX;
+  const y = touch.clientY;
+
+  let direction;
+
+  if (Math.abs(x - window.innerWidth/2) > Math.abs(y - window.innerHeight/2)) {
+    if (x < window.innerWidth/2) direction = "ArrowLeft";
+    else direction = "ArrowRight";
+  } else {
+    if (y < window.innerHeight/2) direction = "ArrowUp";
+    else direction = "ArrowDown";
+  }
+
+  touchMove = setInterval(() => {
+    socket.emit("move", direction);
+  }, 50); // tốc độ di chuyển
+});
+
+canvas.addEventListener("touchend", () => {
+  clearInterval(touchMove);
+});
+canvas.setAttribute("tabindex", "0");
+canvas.focus();
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -72,16 +103,17 @@ let players = {};
 let myId = null;
 // ===== LOAD IMAGES =====
 const imgFront = new Image();
-imgFront.src = "../assets/fyodor_front.jpg";
+imgFront.src = "../assets/fyodor_front.png";
 
 const imgBack = new Image();
-imgBack.src = "../assets/fyodor_back.jpg";
+imgBack.src = "../assets/fyodor_back.png";
 
 const imgBack1 = new Image();
-imgBack1.src = "../assets/fyodor_back_walk_1.jpg";
+imgBack1.src = "../assets/fyodor_back_walk_1.png";
 
 const imgBack2 = new Image();
-imgBack2.src = "../assets/fyodor_back_walk_2.jpg";
+imgBack2.src = "../assets/fyodor_back_walk_2.png";
+  let walkFrame = 0;
 const mapWidth = 4000;
 const mapHeight = 4000;
 
@@ -110,7 +142,7 @@ socket.on("updatePlayers", (serverPlayers) => {
   players = serverPlayers;
 });
 
-document.addEventListener("keydown", (e) => {
+canvas.addEventListener("keydown", (e) => {
   socket.emit("move", e.key);
 });
 
@@ -138,8 +170,17 @@ function draw() {
   // ===== PLAYERS =====
   for (let id in players) {
     const p = players[id];
+let img = imgFront;
 
-   ctx.drawImage(imgFront, p.x, p.y, 40, 40);
+if (p.y < players[myId].y) {
+  img = imgBack;
+}
+
+if (p.y > players[myId].y) {
+  img = walkFrame ? imgBack1 : imgBack2;
+}
+
+ctx.drawImage(img, p.x, p.y, 48, 48);
 
     ctx.fillStyle = "white";
     ctx.font = "14px Arial";
@@ -153,7 +194,9 @@ function draw() {
 }
 
 draw();
-
+setInterval(()=>{
+  walkFrame = (walkFrame + 1) % 2;
+},200);
 </script>
 </body>
 </html>
