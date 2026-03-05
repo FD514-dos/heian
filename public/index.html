@@ -104,9 +104,6 @@ let myId = null;
   // ===== WALK ANIMATION =====
 let walkFrame = false;
 
-setInterval(() => {
-  walkFrame = !walkFrame;
-}, 200);
 // ===== LOAD IMAGES =====
 const imgFront = new Image();
 imgFront.src = "../assets/fyodor_front.png";
@@ -171,7 +168,15 @@ function draw() {
   // ===== MAP =====
   ctx.fillStyle = "white";
   ctx.fillRect(0, 0, mapWidth, mapHeight);
+// ===== GRASS =====
+const grass = [];
 
+for (let i = 0; i < 300; i++) {
+  grass.push({
+    x: Math.random() * mapWidth,
+    y: Math.random() * mapHeight
+  });
+}
   // ===== GRASS =====
   ctx.fillStyle = "#7ed957";
 
@@ -186,7 +191,7 @@ function draw() {
     let img = imgFront;
 
     // animation đơn giản
-    if (p.y < players[myId].y) {
+if (p.y < me.y) {
       img = walkFrame ? imgBack1 : imgBack2;
     }
 
