@@ -256,6 +256,45 @@ mapSize,
 mapSize
 );
 
+for(let x=0;x<mapSize;x+=20){
+
+for(let y=0;y<mapSize;y+=20){
+
+const gx = x+mapScreenX;
+const gy = y+mapScreenY;
+
+ctx.fillStyle = "black";
+
+const r = (x*y)%3;
+
+if(r===0){
+
+ctx.fillRect(gx+8,gy+4,2,8);
+
+ctx.fillRect(gx+4,gy+10,2,6);
+
+}
+
+if(r===1){
+
+ctx.fillRect(gx+12,gy+5,2,8);
+
+ctx.fillRect(gx+8,gy+12,2,5);
+
+}
+
+if(r===2){
+
+ctx.fillRect(gx+6,gy+6,2,7);
+
+ctx.fillRect(gx+10,gy+8,2,7);
+
+}
+
+}
+
+}
+
 ctx.fillStyle = "black";
 
 ctx.fillRect(
