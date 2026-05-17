@@ -31,7 +31,7 @@ font-size:40px;
 margin-bottom:20px;
 }
 
-iinput{
+input{
 padding:10px;
 width:300px;
 font-size:20px;
@@ -281,9 +281,7 @@ drawTorii(
 -camera.y
 );
 
-}
-
-  ctx.strokeStyle = "white";
+ctx.strokeStyle = "white";
 
 ctx.lineWidth = 4;
 
@@ -300,7 +298,6 @@ drawTorii(
 );
 
 }
-
 function drawPlayers(){
 
 Object.values(players).forEach(p=>{
@@ -434,15 +431,14 @@ camera.x = me.x-innerWidth/2;
 
 camera.y = me.y-innerHeight/2;
 
-}
 npc.teleportTimer++;
 
 if(npc.teleportTimer > 240){
 
 npc.teleportTimer = 0;
 
-npc.x = Math.random()*3900;
-npc.y = Math.random()*3900;
+npc.x = Math.random()*mapSize;
+npc.y = Math.random()*mapSize;
 
 }
 
@@ -492,16 +488,7 @@ npc.waitTimer ??= 0;
 
 npc.waitTimer++;
 
-if(dist < 30){
-
-npc.x = Math.random()*mapSize;
-npc.y = Math.random()*mapSize;
-
-npc.waitTimer = 0;
-
-}else{
-
-if(npc.waitTimer > 600){
+if(dist < 30 || npc.waitTimer > 600){
 
 npc.x = Math.random()*mapSize;
 npc.y = Math.random()*mapSize;
@@ -513,24 +500,30 @@ npc.waitTimer = 0;
 }
 
 }
-if(Math.random()<0.02){
-
-npc.targetX = Math.random()*3900;
-npc.targetY = Math.random()*3900;
 
 }
 
-const dx2 = npc.targetX-npc.x;
-const dy2 = npc.targetY-npc.y;
+/* wander system */
+
+if(Math.random() < 0.02){
+
+npc.targetX = Math.random()*mapSize;
+npc.targetY = Math.random()*mapSize;
+
+}
+
+const dx2 = npc.targetX - npc.x;
+const dy2 = npc.targetY - npc.y;
 
 const angle2 = Math.atan2(dy2,dx2);
 
-npc.x += Math.cos(angle2)*5;
-npc.y += Math.sin(angle2)*5;
-
+npc.x += Math.cos(angle2)*1.5;
+npc.y += Math.sin(angle2)*1.5;
+  
 }
 
 }
+  
 drawMap();
 
 drawPlayers();
