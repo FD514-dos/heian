@@ -165,7 +165,7 @@ document.getElementById("login").style.display =
 "none";
 
 document.getElementById("message").style.display =
-"block";
+"flex";
 
 setTimeout(()=>{
 
@@ -207,16 +207,26 @@ socket.emit("move","right");
 function drawTorii(x,y){
 
 ctx.fillStyle = "black";
+ctx.strokeStyle = "white";
+ctx.lineWidth = 4;
 
-ctx.fillRect(x,y,20,200);
+function block(px,py,w,h){
 
-ctx.fillRect(x+180,y,20,200);
-
-ctx.fillRect(x-40,y,280,20);
-
-ctx.fillRect(x-20,y+40,240,15);
+ctx.fillRect(px,py,w,h);
+ctx.strokeRect(px,py,w,h);
 
 }
+
+block(x,y,20,200);
+
+block(x+180,y,20,200);
+
+block(x-40,y,280,20);
+
+block(x-20,y+40,240,15);
+
+}
+
 
 function drawMap(){
 
@@ -227,9 +237,20 @@ ctx.fillRect(0,0,canvas.width,canvas.height);
 ctx.fillStyle = "black";
 
 ctx.fillRect(
-1900-camera.x,
+1970-camera.x,
 0-camera.y,
-200,
+60,
+mapSize
+);
+
+  ctx.strokeStyle = "white";
+
+ctx.lineWidth = 4;
+
+ctx.strokeRect(
+1970-camera.x,
+0-camera.y,
+60,
 mapSize
 );
 
@@ -268,19 +289,35 @@ ctx.fillText(p.name,x-20,y-10);
 function drawFrontLayer(){
 
 ctx.fillStyle = "black";
+ctx.strokeStyle = "white";
+ctx.lineWidth = 4;
 
-ctx.fillRect(
+function block(px,py,w,h){
+
+ctx.fillRect(px,py,w,h);
+ctx.strokeRect(px,py,w,h);
+
+}
+
+block(
 1900-camera.x,
 3300-camera.y,
 20,
 200
 );
 
-ctx.fillRect(
+block(
 2080-camera.x,
 3300-camera.y,
 20,
 200
+);
+
+block(
+1880-camera.x,
+3340-camera.y,
+240,
+15
 );
 
 }
