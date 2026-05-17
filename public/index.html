@@ -261,7 +261,7 @@ mapSize
 );
 
 const roadX = 1970;
-const roadY = 3685;
+const roadY = 0;
 
 ctx.fillStyle = "black";
 
@@ -269,7 +269,7 @@ ctx.fillRect(
 roadX-camera.x,
 roadY-camera.y,
 60,
-300
+4000
 );
 
 ctx.strokeStyle = "white";
@@ -280,12 +280,12 @@ ctx.strokeRect(
 roadX-camera.x,
 roadY-camera.y,
 60,
-300
+4000
 );
 
 drawTorii(
 1900-camera.x,
-3785-camera.y
+3760-camera.y
 );
 
 }
@@ -359,21 +359,21 @@ ctx.strokeRect(px,py,w,h);
 
 block(
 1900-camera.x,
-3785-camera.y,
+3760-camera.y,
 20,
 200
 );
 
 block(
 2080-camera.x,
-3785-camera.y,
+3760-camera.y,
 20,
 200
 );
 
 block(
 1860-camera.x,
-3785-camera.y,
+3760-camera.y,
 280,
 20
 );
@@ -470,15 +470,22 @@ const angle = Math.atan2(dy,dx);
 
 /* luôn giữ khoảng cách */
 
-if(dist > 45){
+const keepDistance = 60;
+
+if(dist > keepDistance){
 
 npc.x += Math.cos(angle)*2;
 npc.y += Math.sin(angle)*2;
 
 }else{
 
-npc.state = "wait";
-npc.waitTimer = Date.now();
+const angleBack = Math.atan2(
+npc.y - p.y,
+npc.x - p.x
+);
+
+npc.x = p.x + Math.cos(angleBack)*keepDistance;
+npc.y = p.y + Math.sin(angleBack)*keepDistance;
 
 }
 
