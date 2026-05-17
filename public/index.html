@@ -31,7 +31,7 @@ font-size:40px;
 margin-bottom:20px;
 }
 
-iinput{
+input{
 padding:10px;
 width:300px;
 font-size:20px;
@@ -217,15 +217,6 @@ socket.emit("move","right");
 function drawTorii(x,y){
 
 ctx.fillStyle = "black";
-ctx.strokeStyle = "white";
-ctx.lineWidth = 4;
-
-function block(px,py,w,h){
-
-ctx.fillRect(px,py,w,h);
-ctx.strokeRect(px,py,w,h);
-
-}
 
 block(x,y,20,200);
 
@@ -317,7 +308,7 @@ ctx.strokeRect(
 
 drawTorii(
 440-camera.x,
--camera.y
+793-camera.y
 );
 
 }
@@ -460,7 +451,7 @@ voidTimer = 0;
 if(voidTimer > 3600){
 
 me.x = 500;
-me.y = 950;
+me.y = 0;
 
 voidTimer = 0;
 
@@ -480,8 +471,8 @@ if(npc.teleportTimer > 240){
 
 npc.teleportTimer = 0;
 
-npc.x = Math.random()*3900;
-npc.y = Math.random()*3900;
+npc.x = Math.random()*mapSize;
+npc.y = Math.random()*mapSize;
 
 }
 
@@ -520,12 +511,14 @@ if(dist > 70){
 npc.x += Math.cos(angle)*4;
 npc.y += Math.sin(angle)*4;
 
-}else if(dist > 45){
+}
+else if(dist > 45){
 
 npc.x += Math.cos(angle)*1;
 npc.y += Math.sin(angle)*1;
 
-}else{
+}
+else{
 
 npc.waitTimer ??= 0;
 
@@ -538,7 +531,8 @@ npc.y = Math.random()*mapSize;
 
 npc.waitTimer = 0;
 
-}else{
+}
+else{
 
 if(npc.waitTimer > 600){
 
@@ -552,10 +546,14 @@ npc.waitTimer = 0;
 }
 
 }
+
+}
+else{
+
 if(Math.random()<0.02){
 
-npc.targetX = Math.random()*3900;
-npc.targetY = Math.random()*3900;
+npc.targetX = Math.random()*mapSize;
+npc.targetY = Math.random()*mapSize;
 
 }
 
@@ -566,6 +564,8 @@ const angle2 = Math.atan2(dy2,dx2);
 
 npc.x += Math.cos(angle2)*5;
 npc.y += Math.sin(angle2)*5;
+
+}
 
 }
 
