@@ -47,8 +47,8 @@ io.on("connection", (socket) => {
     players[socket.id] = {
       id: socket.id,
       name,
-      x: 2000,
-      y: 3600
+     x: 500,
+y: 500
     };
 
     socket.emit("loginSuccess", players[socket.id]);
