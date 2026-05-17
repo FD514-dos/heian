@@ -21,7 +21,8 @@ display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
-background:white;
+background:black;
+color:white;
 z-index:10;
 }
 
@@ -30,17 +31,30 @@ font-size:40px;
 margin-bottom:20px;
 }
 
-input{
+iinput{
 padding:10px;
 width:300px;
 font-size:20px;
+background:black;
+border:2px solid white;
+color:white;
+outline:none;
 }
 
 button{
-margin-top:10px;
-padding:10px 20px;
-}
+margin-top:20px;
+padding:12px 40px;
 
+background:black;
+color:white;
+
+border:2px solid white;
+
+font-size:24px;
+
+cursor:pointer;
+}
+  
 #error{
 margin-top:10px;
 color:red;
@@ -48,13 +62,24 @@ color:red;
 
 #message{
 position:absolute;
+
 width:100%;
-top:40%;
-text-align:center;
-font-size:50px;
-color:white;
+height:100%;
+
 display:none;
-z-index:20;
+
+justify-content:center;
+align-items:center;
+
+background:black;
+
+text-align:center;
+
+font-size:60px;
+
+color:white;
+
+z-index:999;
 }
 
 canvas{
