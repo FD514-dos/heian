@@ -134,17 +134,26 @@ const camera = {
 x:0,
 y:0
 };
+
+const spawnPoint = {
+x:2000,
+y:3850
+};
+
 const npc = {
 
 x:2000,
-y:1800,
+y:3700,
 
 targetX:2000,
-targetY:1800,
+targetY:3700,
 
-teleportTimer:0
+waitTimer:0,
+teleportTimer:0,
+state:"move"
 
 };
+
 document.getElementById("enter").onclick = ()=>{
 
 const name =
@@ -237,36 +246,46 @@ block(x-20,y+40,240,15);
 
 }
 
-
 function drawMap(){
+
+ctx.fillStyle = "black";
+ctx.fillRect(0,0,canvas.width,canvas.height);
 
 ctx.fillStyle = "white";
 
-ctx.fillRect(0,0,canvas.width,canvas.height);
+ctx.fillRect(
+0-camera.x,
+0-camera.y,
+mapSize,
+mapSize
+);
+
+const roadX = 1970;
+const roadY = 3685;
 
 ctx.fillStyle = "black";
 
 ctx.fillRect(
-1970-camera.x,
-0-camera.y,
+roadX-camera.x,
+roadY-camera.y,
 60,
-3300
+300
 );
 
-  ctx.strokeStyle = "white";
+ctx.strokeStyle = "white";
 
 ctx.lineWidth = 4;
 
 ctx.strokeRect(
-1970-camera.x,
-0-camera.y,
+roadX-camera.x,
+roadY-camera.y,
 60,
-3300
+300
 );
 
 drawTorii(
 1900-camera.x,
-3300-camera.y
+3785-camera.y
 );
 
 }
@@ -299,6 +318,7 @@ ctx.fillStyle = "white";
 ctx.fillText(p.name,x-20,y-10);
 
 });
+
 const nx = npc.x-camera.x;
 const ny = npc.y-camera.y;
 
@@ -321,6 +341,7 @@ ctx.strokeText("Âm dương sư",nx-30,ny-10);
 ctx.fillStyle = "#5a0000";
 
 ctx.fillText("Âm dương sư",nx-30,ny-10);
+
 }
 
 function drawFrontLayer(){
@@ -338,33 +359,47 @@ ctx.strokeRect(px,py,w,h);
 
 block(
 1900-camera.x,
-3300-camera.y,
+3785-camera.y,
 20,
 200
 );
 
 block(
 2080-camera.x,
-3300-camera.y,
+3785-camera.y,
 20,
 200
 );
 
 block(
 1860-camera.x,
-3300-camera.y,
+3785-camera.y,
 280,
 20
 );
 
 block(
 1880-camera.x,
-3340-camera.y,
+3825-camera.y,
 240,
 15
 );
 
 }
+
+function teleportNPC(){
+
+npc.x = Math.random()*3900;
+npc.y = Math.random()*3900;
+
+npc.targetX = npc.x;
+npc.targetY = npc.y;
+
+npc.state = "move";
+npc.waitTimer = 0;
+
+}
+
 function loop(){
 
 requestAnimationFrame(loop);
@@ -374,23 +409,41 @@ const me = players[myId];
 if(me){
 
 camera.x = me.x-innerWidth/2;
-
 camera.y = me.y-innerHeight/2;
 
+/* vùng đen vô tận */
+
+if(
+me.x < 0 ||
+me.y < 0 ||
+me.x > mapSize ||
+me.y > mapSize
+){
+
+if(!me.voidTimer){
+
+me.voidTimer = Date.now();
+
 }
-npc.teleportTimer++;
 
-if(npc.teleportTimer > 240){
+if(Date.now() - me.voidTimer > 60000){
 
-npc.teleportTimer = 0;
+me.x = spawnPoint.x;
+me.y = spawnPoint.y;
 
-npc.x = Math.random()*3900;
-npc.y = Math.random()*3900;
+me.voidTimer = null;
 
 }
 
-let nearest = null;
-let nearestDist = 999999;
+}else{
+
+me.voidTimer = null;
+
+}
+
+}
+
+/* NPC */
 
 Object.values(players).forEach(p=>{
 
@@ -399,60 +452,54 @@ const dy = p.y-npc.y;
 
 const dist = Math.sqrt(dx*dx+dy*dy);
 
-if(dist < nearestDist){
+/* nếu người chơi quá gần -> biến mất */
 
-nearestDist = dist;
-nearest = p;
+if(dist < 20){
+
+teleportNPC();
 
 }
 
-});
+/* tiếp cận */
 
-if(nearest){
-
-const dx = nearest.x-npc.x;
-const dy = nearest.y-npc.y;
-
-const dist = Math.sqrt(dx*dx+dy*dy);
+if(npc.state === "move"){
 
 if(dist < 500){
 
 const angle = Math.atan2(dy,dx);
 
-let speed = 3;
+/* luôn giữ khoảng cách */
 
-if(dist < 120){
+if(dist > 45){
 
-speed = 1;
-}
-
-if(dist > 2){
-
-npc.x += Math.cos(angle)*speed;
-npc.y += Math.sin(angle)*speed;
-
-}
+npc.x += Math.cos(angle)*2;
+npc.y += Math.sin(angle)*2;
 
 }else{
 
-if(Math.random()<0.02){
-
-npc.targetX = Math.random()*3900;
-npc.targetY = Math.random()*3900;
-
-}
-
-const dx2 = npc.targetX-npc.x;
-const dy2 = npc.targetY-npc.y;
-
-const angle2 = Math.atan2(dy2,dx2);
-
-npc.x += Math.cos(angle2)*5;
-npc.y += Math.sin(angle2)*5;
+npc.state = "wait";
+npc.waitTimer = Date.now();
 
 }
 
 }
+
+}
+
+/* đứng yên 10 giây */
+
+if(npc.state === "wait"){
+
+if(Date.now() - npc.waitTimer > 10000){
+
+teleportNPC();
+
+}
+
+}
+
+});
+
 drawMap();
 
 drawPlayers();
