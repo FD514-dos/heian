@@ -127,8 +127,8 @@ canvas.height = innerHeight;
 
 let players = {};
 let myId = null;
-
-const mapSize = 4000;
+let voidTimer = 0;
+const mapSize = 1000;
 
 const camera = {
 x:0,
@@ -240,18 +240,48 @@ block(x-20,y+40,240,15);
 
 function drawMap(){
 
-ctx.fillStyle = "white";
+ctx.fillStyle = "black";
 
 ctx.fillRect(0,0,canvas.width,canvas.height);
+
+const mapScreenX = -camera.x;
+const mapScreenY = -camera.y;
+
+ctx.fillStyle = "white";
+
+ctx.fillRect(
+mapScreenX,
+mapScreenY,
+mapSize,
+mapSize
+);
 
 ctx.fillStyle = "black";
 
 ctx.fillRect(
-1970-camera.x,
+470-camera.x,
 0-camera.y,
 60,
-3300
+793
 );
+
+ctx.strokeStyle = "white";
+
+ctx.lineWidth = 4;
+
+ctx.strokeRect(
+470-camera.x,
+0-camera.y,
+60,
+793
+);
+
+drawTorii(
+440-camera.x,
+-camera.y
+);
+
+}
 
   ctx.strokeStyle = "white";
 
@@ -337,29 +367,29 @@ ctx.strokeRect(px,py,w,h);
 }
 
 block(
-1900-camera.x,
-3300-camera.y,
+440-camera.x,
+793-camera.y,
 20,
 200
 );
 
 block(
-2080-camera.x,
-3300-camera.y,
+620-camera.x,
+793-camera.y,
 20,
 200
 );
 
 block(
-1860-camera.x,
-3300-camera.y,
+400-camera.x,
+793-camera.y,
 280,
 20
 );
 
 block(
-1880-camera.x,
-3340-camera.y,
+420-camera.x,
+833-camera.y,
 240,
 15
 );
@@ -370,7 +400,34 @@ function loop(){
 requestAnimationFrame(loop);
 
 const me = players[myId];
+if(me){
 
+const inside =
+me.x >= 0 &&
+me.y >= 0 &&
+me.x <= mapSize &&
+me.y <= mapSize;
+
+if(!inside){
+
+voidTimer++;
+
+}else{
+
+voidTimer = 0;
+
+}
+
+if(voidTimer > 3600){
+
+me.x = 500;
+me.y = 950;
+
+voidTimer = 0;
+
+}
+
+}
 if(me){
 
 camera.x = me.x-innerWidth/2;
@@ -419,22 +476,43 @@ if(dist < 500){
 
 const angle = Math.atan2(dy,dx);
 
-let speed = 3;
+if(dist > 70){
 
-if(dist < 120){
+npc.x += Math.cos(angle)*4;
+npc.y += Math.sin(angle)*4;
 
-speed = 1;
-}
+}else if(dist > 45){
 
-if(dist > 2){
-
-npc.x += Math.cos(angle)*speed;
-npc.y += Math.sin(angle)*speed;
-
-}
+npc.x += Math.cos(angle)*1;
+npc.y += Math.sin(angle)*1;
 
 }else{
 
+npc.waitTimer ??= 0;
+
+npc.waitTimer++;
+
+if(dist < 30){
+
+npc.x = Math.random()*mapSize;
+npc.y = Math.random()*mapSize;
+
+npc.waitTimer = 0;
+
+}else{
+
+if(npc.waitTimer > 600){
+
+npc.x = Math.random()*mapSize;
+npc.y = Math.random()*mapSize;
+
+npc.waitTimer = 0;
+
+}
+
+}
+
+}
 if(Math.random()<0.02){
 
 npc.targetX = Math.random()*3900;
