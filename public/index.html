@@ -170,7 +170,30 @@ const spawnPoint = {
 x:2000,
 y:3850
 };
+const palace = {
 
+x:1600,
+y:120,
+
+width:800,
+height:500,
+
+doorX:1930,
+doorY:520,
+
+doorW:140,
+doorH:100
+
+};
+
+const map2Spawn = {
+
+x:2000,
+y:3500
+
+};
+
+let currentMap = 1;
 const npc = {
 
 x:Math.random()*3900,
@@ -346,9 +369,113 @@ block(x-40,y,280,20);
 block(x-20,y+40,240,15);
 
 }
+function drawPalace(){
 
+const x = palace.x - camera.x;
+const y = palace.y - camera.y;
+
+/* thân cung điện */
+
+ctx.fillStyle = "white";
+ctx.strokeStyle = "black";
+ctx.lineWidth = 5;
+
+ctx.fillRect(
+x,
+y,
+palace.width,
+palace.height
+);
+
+ctx.strokeRect(
+x,
+y,
+palace.width,
+palace.height
+);
+
+/* mái lớn */
+
+ctx.fillStyle = "black";
+
+ctx.beginPath();
+
+ctx.moveTo(x-80,y+80);
+ctx.lineTo(x+palace.width/2,y-90);
+ctx.lineTo(x+palace.width+80,y+80);
+
+ctx.closePath();
+
+ctx.fill();
+
+ctx.stroke();
+
+/* mái phụ */
+
+ctx.beginPath();
+
+ctx.moveTo(x-40,y+170);
+ctx.lineTo(x+palace.width/2,y+30);
+ctx.lineTo(x+palace.width+40,y+170);
+
+ctx.closePath();
+
+ctx.fill();
+
+ctx.stroke();
+
+/* cửa */
+
+ctx.fillStyle = "black";
+
+ctx.fillRect(
+palace.doorX-camera.x,
+palace.doorY-camera.y,
+palace.doorW,
+palace.doorH
+);
+
+}
 function drawMap(){
+if(currentMap === 2){
 
+ctx.fillStyle = "black";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle = "white";
+
+ctx.fillRect(
+0-camera.x,
+0-camera.y,
+mapSize,
+mapSize
+);
+
+/* map 2 */
+
+ctx.fillStyle = "black";
+
+ctx.fillRect(
+1500-camera.x,
+1500-camera.y,
+1000,
+1000
+);
+
+ctx.strokeStyle = "white";
+
+ctx.lineWidth = 6;
+
+ctx.strokeRect(
+1500-camera.x,
+1500-camera.y,
+1000,
+1000
+);
+
+return;
+
+}
 ctx.fillStyle = "black";
 ctx.fillRect(0,0,canvas.width,canvas.height);
 
@@ -388,7 +515,7 @@ drawTorii(
 1900-camera.x,
 3760-camera.y
 );
-
+drawPalace();
 }
 
 function drawPlayers(){
@@ -487,7 +614,28 @@ block(
 );
 
 }
+function drawPalaceFrontLayer(){
 
+ctx.fillStyle = "white";
+ctx.strokeStyle = "black";
+
+ctx.lineWidth = 5;
+
+ctx.fillRect(
+palace.x-camera.x,
+palace.y-camera.y+250,
+palace.width,
+250
+);
+
+ctx.strokeRect(
+palace.x-camera.x,
+palace.y-camera.y+250,
+palace.width,
+250
+);
+
+}
 function teleportNPC(){
 
 npc.x = Math.random()*3900;
@@ -510,7 +658,58 @@ requestAnimationFrame(loop);
 const me = players[myId];
 
 if(me){
+/* collision cung điện */
 
+if(
+
+me.x + 40 > palace.x &&
+me.x < palace.x + palace.width &&
+me.y + 40 > palace.y &&
+me.y < palace.y + palace.height
+
+){
+
+const insideDoor =
+
+me.x + 40 > palace.doorX &&
+me.x < palace.doorX + palace.doorW &&
+me.y + 40 > palace.doorY &&
+me.y < palace.doorY + palace.doorH;
+
+if(!insideDoor){
+
+if(me.y < palace.y + 250){
+
+me.y = palace.y - 40;
+
+}else{
+
+me.y = palace.y + palace.height;
+
+}
+
+}
+
+}
+  /* vào map 2 */
+
+if(
+
+currentMap === 1 &&
+
+me.x + 40 > palace.doorX &&
+me.x < palace.doorX + palace.doorW &&
+me.y + 40 > palace.doorY &&
+me.y < palace.doorY + palace.doorH
+
+){
+
+currentMap = 2;
+
+me.x = map2Spawn.x;
+me.y = map2Spawn.y;
+
+}
 camera.x = me.x-innerWidth/2;
 camera.y = me.y-innerHeight/2;
 
@@ -627,6 +826,18 @@ drawMap();
 drawPlayers();
 
 drawFrontLayer();
+
+/* che người chơi sau cung điện */
+
+if(me){
+
+if(me.y > palace.y + 250){
+
+drawPalaceFrontLayer();
+
+}
+
+}
 
 }
 
