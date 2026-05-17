@@ -397,6 +397,7 @@ function loop(){
 requestAnimationFrame(loop);
 
 const me = players[myId];
+
 if(me){
 
 const inside =
@@ -424,12 +425,12 @@ voidTimer = 0;
 
 }
 
+camera.x = me.x - innerWidth/2;
+camera.y = me.y - innerHeight/2;
+
 }
-if(me){
 
-camera.x = me.x-innerWidth/2;
-
-camera.y = me.y-innerHeight/2;
+/* NPC */
 
 npc.teleportTimer++;
 
@@ -503,7 +504,7 @@ npc.waitTimer = 0;
 
 }
 
-/* wander system */
+/* wander */
 
 if(Math.random() < 0.02){
 
@@ -519,11 +520,9 @@ const angle2 = Math.atan2(dy2,dx2);
 
 npc.x += Math.cos(angle2)*1.5;
 npc.y += Math.sin(angle2)*1.5;
-  
-}
 
-}
-  
+/* DRAW */
+
 drawMap();
 
 drawPlayers();
