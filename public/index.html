@@ -142,15 +142,18 @@ y:3850
 
 const npc = {
 
-x:2000,
-y:3700,
+x:Math.random()*3900,
+y:Math.random()*3900,
 
-targetX:2000,
-targetY:3700,
+targetX:Math.random()*3900,
+targetY:Math.random()*3900,
+
+speed:1.2,
+
+state:"wander",
 
 waitTimer:0,
-teleportTimer:0,
-state:"move"
+teleportTimer:Date.now()
 
 };
 
@@ -392,14 +395,16 @@ function teleportNPC(){
 npc.x = Math.random()*3900;
 npc.y = Math.random()*3900;
 
-npc.targetX = npc.x;
-npc.targetY = npc.y;
+npc.targetX = Math.random()*3900;
+npc.targetY = Math.random()*3900;
 
-npc.state = "move";
+npc.state = "wander";
+
 npc.waitTimer = 0;
+npc.teleportTimer = Date.now();
 
 }
-
+  
 function loop(){
 
 requestAnimationFrame(loop);
@@ -443,16 +448,53 @@ me.voidTimer = null;
 
 }
 
-/* NPC */
+/* NPC lang thang */
+
+const dxTarget = npc.targetX - npc.x;
+const dyTarget = npc.targetY - npc.y;
+
+const distTarget = Math.sqrt(
+dxTarget*dxTarget +
+dyTarget*dyTarget
+);
+
+/* tới điểm đích -> chọn điểm mới */
+
+if(distTarget < 10){
+
+npc.targetX = Math.random()*3900;
+npc.targetY = Math.random()*3900;
+
+}
+
+/* di chuyển tự nhiên */
+
+const angleTarget = Math.atan2(
+dyTarget,
+dxTarget
+);
+
+npc.x += Math.cos(angleTarget)*npc.speed;
+npc.y += Math.sin(angleTarget)*npc.speed;
+
+/* lâu lâu teleport */
+
+if(Date.now() - npc.teleportTimer > 20000){
+
+teleportNPC();
+
+}
+
+/* chỉ phản ứng nếu tình cờ ở gần */
 
 Object.values(players).forEach(p=>{
 
-const dx = p.x-npc.x;
-const dy = p.y-npc.y;
+const dx = p.x - npc.x;
+const dy = p.y - npc.y;
 
-const dist = Math.sqrt(dx*dx+dy*dy);
+const dist = Math.sqrt(dx*dx + dy*dy);
 
-/* nếu người chơi quá gần -> biến mất */
+/* quá sát -> biến mất */
 
 if(dist < 20){
 
@@ -460,46 +502,18 @@ teleportNPC();
 
 }
 
-/* tiếp cận */
+/* chỉ lại gần khi vô tình ở gần */
 
-if(npc.state === "move"){
-
-if(dist < 500){
+if(dist < 180){
 
 const angle = Math.atan2(dy,dx);
-
-/* luôn giữ khoảng cách */
 
 const keepDistance = 60;
 
 if(dist > keepDistance){
 
-npc.x += Math.cos(angle)*2;
-npc.y += Math.sin(angle)*2;
-
-}else{
-
-const angleBack = Math.atan2(
-npc.y - p.y,
-npc.x - p.x
-);
-
-npc.x = p.x + Math.cos(angleBack)*keepDistance;
-npc.y = p.y + Math.sin(angleBack)*keepDistance;
-
-}
-
-}
-
-}
-
-/* đứng yên 10 giây */
-
-if(npc.state === "wait"){
-
-if(Date.now() - npc.waitTimer > 10000){
-
-teleportNPC();
+npc.x += Math.cos(angle)*0.8;
+npc.y += Math.sin(angle)*0.8;
 
 }
 
