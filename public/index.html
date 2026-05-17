@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Bình An Kinh</title>
+
+<style>
+
+body{
+margin:0;
+overflow:hidden;
+font-family:serif;
+background:white;
+}
+
+#login{
+position:absolute;
+width:100%;
+height:100%;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+background:white;
+z-index:10;
+}
+
+#title{
+font-size:40px;
+margin-bottom:20px;
+}
+
+input{
+padding:10px;
+width:300px;
+font-size:20px;
+}
+
+button{
+margin-top:10px;
+padding:10px 20px;
+}
+
+#error{
+margin-top:10px;
+color:red;
+}
+
+#message{
+position:absolute;
+width:100%;
+top:40%;
+text-align:center;
+font-size:50px;
+color:white;
+display:none;
+z-index:20;
+}
+
+canvas{
+display:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="login">
+
+<div id="title">
+Thỉnh quân báo danh tính
+</div>
+
+<input id="name">
+
+<button id="enter">
+Tiến nhập
+</button>
+
+<div id="error"></div>
+
+</div>
+
+<div id="message">
+Mừng khách nhân tới Bình An Kinh
+</div>
+
+<canvas id="game"></canvas>
+
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+
+const socket = io();
+
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+
+let players = {};
+let myId = null;
+
+const mapSize = 4000;
+
+const camera = {
+x:0,
+y:0
+};
+
+document.getElementById("enter").onclick = ()=>{
+
+const name =
+document.getElementById("name").value.trim();
+
+socket.emit("login", name);
+
+};
+
+socket.on("loginFailed",(msg)=>{
+
+document.getElementById("error").innerText = msg;
+
+});
+
+socket.on("loginSuccess",(player)=>{
+
+myId = player.id;
+
+document.getElementById("login").style.background =
+"black";
+
+document.getElementById("login").innerHTML = "";
+
+setTimeout(()=>{
+
+document.getElementById("login").style.display =
+"none";
+
+document.getElementById("message").style.display =
+"block";
+
+setTimeout(()=>{
+
+document.getElementById("message").style.display =
+"none";
+
+canvas.style.display = "block";
+
+loop();
+
+},2500);
+
+},1000);
+
+});
+
+socket.on("players",(p)=>{
+
+players = p;
+
+});
+
+document.addEventListener("keydown",(e)=>{
+
+if(e.key==="ArrowUp")
+socket.emit("move","up");
+
+if(e.key==="ArrowDown")
+socket.emit("move","down");
+
+if(e.key==="ArrowLeft")
+socket.emit("move","left");
+
+if(e.key==="ArrowRight")
+socket.emit("move","right");
+
+});
+
+function drawTorii(x,y){
+
+ctx.fillStyle = "black";
+
+ctx.fillRect(x,y,20,200);
+
+ctx.fillRect(x+180,y,20,200);
+
+ctx.fillRect(x-40,y,280,20);
+
+ctx.fillRect(x-20,y+40,240,15);
+
+}
+
+function drawMap(){
+
+ctx.fillStyle = "white";
+
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle = "black";
+
+ctx.fillRect(
+1900-camera.x,
+0-camera.y,
+200,
+mapSize
+);
+
+drawTorii(
+1900-camera.x,
+3300-camera.y
+);
+
+}
+
+function drawPlayers(){
+
+Object.values(players).forEach(p=>{
+
+const x = p.x-camera.x;
+const y = p.y-camera.y;
+
+ctx.fillStyle = "white";
+
+ctx.fillRect(x,y,40,40);
+
+ctx.strokeStyle = "black";
+
+ctx.strokeRect(x,y,40,40);
+
+ctx.fillStyle = "#5a0000";
+
+ctx.font = "18px serif";
+
+ctx.fillText(p.name,x-20,y-10);
+
+});
+
+}
+
+function drawFrontLayer(){
+
+ctx.fillStyle = "black";
+
+ctx.fillRect(
+1900-camera.x,
+3300-camera.y,
+20,
+200
+);
+
+ctx.fillRect(
+2080-camera.x,
+3300-camera.y,
+20,
+200
+);
+
+}
+
+function loop(){
+
+requestAnimationFrame(loop);
+
+const me = players[myId];
+
+if(me){
+
+camera.x = me.x-innerWidth/2;
+
+camera.y = me.y-innerHeight/2;
+
+}
+
+drawMap();
+
+drawPlayers();
+
+drawFrontLayer();
+
+}
+
+</script>
+
+</body>
+</html>
