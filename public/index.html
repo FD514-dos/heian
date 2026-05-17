@@ -134,7 +134,17 @@ const camera = {
 x:0,
 y:0
 };
+const npc = {
 
+x:2000,
+y:1800,
+
+targetX:2000,
+targetY:1800,
+
+teleportTimer:0
+
+};
 document.getElementById("enter").onclick = ()=>{
 
 const name =
@@ -276,14 +286,41 @@ ctx.strokeStyle = "black";
 
 ctx.strokeRect(x,y,40,40);
 
-ctx.fillStyle = "#5a0000";
-
 ctx.font = "18px serif";
+
+ctx.lineWidth = 4;
+
+ctx.strokeStyle = "black";
+
+ctx.strokeText(p.name,x-20,y-10);
+
+ctx.fillStyle = "white";
 
 ctx.fillText(p.name,x-20,y-10);
 
 });
+const nx = npc.x-camera.x;
+const ny = npc.y-camera.y;
 
+ctx.fillStyle = "white";
+
+ctx.fillRect(nx,ny,40,40);
+
+ctx.strokeStyle = "black";
+
+ctx.strokeRect(nx,ny,40,40);
+
+ctx.font = "18px serif";
+
+ctx.lineWidth = 4;
+
+ctx.strokeStyle = "black";
+
+ctx.strokeText("Âm dương sư",nx-30,ny-10);
+
+ctx.fillStyle = "#5a0000";
+
+ctx.fillText("Âm dương sư",nx-30,ny-10);
 }
 
 function drawFrontLayer(){
@@ -341,7 +378,81 @@ camera.x = me.x-innerWidth/2;
 camera.y = me.y-innerHeight/2;
 
 }
+npc.teleportTimer++;
 
+if(npc.teleportTimer > 240){
+
+npc.teleportTimer = 0;
+
+npc.x = Math.random()*3900;
+npc.y = Math.random()*3900;
+
+}
+
+let nearest = null;
+let nearestDist = 999999;
+
+Object.values(players).forEach(p=>{
+
+const dx = p.x-npc.x;
+const dy = p.y-npc.y;
+
+const dist = Math.sqrt(dx*dx+dy*dy);
+
+if(dist < nearestDist){
+
+nearestDist = dist;
+nearest = p;
+
+}
+
+});
+
+if(nearest){
+
+const dx = nearest.x-npc.x;
+const dy = nearest.y-npc.y;
+
+const dist = Math.sqrt(dx*dx+dy*dy);
+
+if(dist < 500){
+
+const angle = Math.atan2(dy,dx);
+
+let speed = 3;
+
+if(dist < 120){
+
+speed = 1;
+}
+
+if(dist > 2){
+
+npc.x += Math.cos(angle)*speed;
+npc.y += Math.sin(angle)*speed;
+
+}
+
+}else{
+
+if(Math.random()<0.02){
+
+npc.targetX = Math.random()*3900;
+npc.targetY = Math.random()*3900;
+
+}
+
+const dx2 = npc.targetX-npc.x;
+const dy2 = npc.targetY-npc.y;
+
+const angle2 = Math.atan2(dy2,dx2);
+
+npc.x += Math.cos(angle2)*5;
+npc.y += Math.sin(angle2)*5;
+
+}
+
+}
 drawMap();
 
 drawPlayers();
