@@ -228,7 +228,6 @@ block(x-20,y+40,240,15);
 
 }
 
-
 function drawMap(){
 
 ctx.fillStyle = "black";
@@ -309,24 +308,6 @@ ctx.strokeRect(
 drawTorii(
 440-camera.x,
 793-camera.y
-);
-
-}
-
-  ctx.strokeStyle = "white";
-
-ctx.lineWidth = 4;
-
-ctx.strokeRect(
-1970-camera.x,
-0-camera.y,
-60,
-3300
-);
-
-drawTorii(
-1900-camera.x,
-3300-camera.y
 );
 
 }
@@ -451,7 +432,7 @@ voidTimer = 0;
 if(voidTimer > 3600){
 
 me.x = 500;
-me.y = 0;
+me.y = 900;
 
 voidTimer = 0;
 
@@ -569,7 +550,6 @@ npc.y += Math.sin(angle2)*5;
 
 }
 
-}
 drawMap();
 
 drawPlayers();
