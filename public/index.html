@@ -251,6 +251,8 @@ function drawMap(){
 ctx.fillStyle = "black";
 ctx.fillRect(0,0,canvas.width,canvas.height);
 
+/* map */
+
 ctx.fillStyle = "white";
 
 ctx.fillRect(
@@ -260,16 +262,17 @@ mapSize,
 mapSize
 );
 
+/* con đường */
+
 const roadX = 1970;
-const roadY = 3685;
 
 ctx.fillStyle = "black";
 
 ctx.fillRect(
 roadX-camera.x,
-roadY-camera.y,
+0-camera.y,
 60,
-300
+4000
 );
 
 ctx.strokeStyle = "white";
@@ -278,69 +281,17 @@ ctx.lineWidth = 4;
 
 ctx.strokeRect(
 roadX-camera.x,
-roadY-camera.y,
+0-camera.y,
 60,
-300
+4000
 );
+
+/* cổng torii sát mép dưới */
 
 drawTorii(
 1900-camera.x,
-3785-camera.y
+3790-camera.y
 );
-
-}
-
-function drawPlayers(){
-
-Object.values(players).forEach(p=>{
-
-const x = p.x-camera.x;
-const y = p.y-camera.y;
-
-ctx.fillStyle = "white";
-
-ctx.fillRect(x,y,40,40);
-
-ctx.strokeStyle = "black";
-
-ctx.strokeRect(x,y,40,40);
-
-ctx.font = "18px serif";
-
-ctx.lineWidth = 4;
-
-ctx.strokeStyle = "black";
-
-ctx.strokeText(p.name,x-20,y-10);
-
-ctx.fillStyle = "white";
-
-ctx.fillText(p.name,x-20,y-10);
-
-});
-
-const nx = npc.x-camera.x;
-const ny = npc.y-camera.y;
-
-ctx.fillStyle = "white";
-
-ctx.fillRect(nx,ny,40,40);
-
-ctx.strokeStyle = "black";
-
-ctx.strokeRect(nx,ny,40,40);
-
-ctx.font = "18px serif";
-
-ctx.lineWidth = 4;
-
-ctx.strokeStyle = "black";
-
-ctx.strokeText("Âm dương sư",nx-30,ny-10);
-
-ctx.fillStyle = "#5a0000";
-
-ctx.fillText("Âm dương sư",nx-30,ny-10);
 
 }
 
@@ -357,30 +308,32 @@ ctx.strokeRect(px,py,w,h);
 
 }
 
+/* torii front */
+
 block(
 1900-camera.x,
-3785-camera.y,
+3790-camera.y,
 20,
 200
 );
 
 block(
 2080-camera.x,
-3785-camera.y,
+3790-camera.y,
 20,
 200
 );
 
 block(
 1860-camera.x,
-3785-camera.y,
+3790-camera.y,
 280,
 20
 );
 
 block(
 1880-camera.x,
-3825-camera.y,
+3830-camera.y,
 240,
 15
 );
@@ -452,7 +405,7 @@ const dy = p.y-npc.y;
 
 const dist = Math.sqrt(dx*dx+dy*dy);
 
-/* nếu người chơi quá gần -> biến mất */
+/* người chơi tiến quá gần -> biến mất */
 
 if(dist < 20){
 
@@ -468,9 +421,9 @@ if(dist < 500){
 
 const angle = Math.atan2(dy,dx);
 
-/* luôn giữ khoảng cách */
+/* giữ khoảng cách 20 pixel */
 
-if(dist > 45){
+if(dist > 20){
 
 npc.x += Math.cos(angle)*2;
 npc.y += Math.sin(angle)*2;
