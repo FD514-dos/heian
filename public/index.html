@@ -31,7 +31,7 @@ font-size:40px;
 margin-bottom:20px;
 }
 
-input{
+iinput{
 padding:10px;
 width:300px;
 font-size:20px;
@@ -217,6 +217,15 @@ socket.emit("move","right");
 function drawTorii(x,y){
 
 ctx.fillStyle = "black";
+ctx.strokeStyle = "white";
+ctx.lineWidth = 4;
+
+function block(px,py,w,h){
+
+ctx.fillRect(px,py,w,h);
+ctx.strokeRect(px,py,w,h);
+
+}
 
 block(x,y,20,200);
 
@@ -227,6 +236,7 @@ block(x-40,y,280,20);
 block(x-20,y+40,240,15);
 
 }
+
 
 function drawMap(){
 
@@ -245,45 +255,6 @@ mapScreenY,
 mapSize,
 mapSize
 );
-
-for(let x=0;x<mapSize;x+=20){
-
-for(let y=0;y<mapSize;y+=20){
-
-const gx = x+mapScreenX;
-const gy = y+mapScreenY;
-
-ctx.fillStyle = "black";
-
-const r = (x*y)%3;
-
-if(r===0){
-
-ctx.fillRect(gx+8,gy+4,2,8);
-
-ctx.fillRect(gx+4,gy+10,2,6);
-
-}
-
-if(r===1){
-
-ctx.fillRect(gx+12,gy+5,2,8);
-
-ctx.fillRect(gx+8,gy+12,2,5);
-
-}
-
-if(r===2){
-
-ctx.fillRect(gx+6,gy+6,2,7);
-
-ctx.fillRect(gx+10,gy+8,2,7);
-
-}
-
-}
-
-}
 
 ctx.fillStyle = "black";
 
@@ -307,7 +278,25 @@ ctx.strokeRect(
 
 drawTorii(
 440-camera.x,
-793-camera.y
+-camera.y
+);
+
+}
+
+  ctx.strokeStyle = "white";
+
+ctx.lineWidth = 4;
+
+ctx.strokeRect(
+1970-camera.x,
+0-camera.y,
+60,
+3300
+);
+
+drawTorii(
+1900-camera.x,
+3300-camera.y
 );
 
 }
@@ -432,7 +421,7 @@ voidTimer = 0;
 if(voidTimer > 3600){
 
 me.x = 500;
-me.y = 900;
+me.y = 950;
 
 voidTimer = 0;
 
@@ -452,8 +441,8 @@ if(npc.teleportTimer > 240){
 
 npc.teleportTimer = 0;
 
-npc.x = Math.random()*mapSize;
-npc.y = Math.random()*mapSize;
+npc.x = Math.random()*3900;
+npc.y = Math.random()*3900;
 
 }
 
@@ -492,14 +481,12 @@ if(dist > 70){
 npc.x += Math.cos(angle)*4;
 npc.y += Math.sin(angle)*4;
 
-}
-else if(dist > 45){
+}else if(dist > 45){
 
 npc.x += Math.cos(angle)*1;
 npc.y += Math.sin(angle)*1;
 
-}
-else{
+}else{
 
 npc.waitTimer ??= 0;
 
@@ -512,8 +499,7 @@ npc.y = Math.random()*mapSize;
 
 npc.waitTimer = 0;
 
-}
-else{
+}else{
 
 if(npc.waitTimer > 600){
 
@@ -527,14 +513,10 @@ npc.waitTimer = 0;
 }
 
 }
-
-}
-else{
-
 if(Math.random()<0.02){
 
-npc.targetX = Math.random()*mapSize;
-npc.targetY = Math.random()*mapSize;
+npc.targetX = Math.random()*3900;
+npc.targetY = Math.random()*3900;
 
 }
 
@@ -549,7 +531,6 @@ npc.y += Math.sin(angle2)*5;
 }
 
 }
-
 drawMap();
 
 drawPlayers();
