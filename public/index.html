@@ -5,7 +5,38 @@
 <title>Bình An Kinh</title>
 
 <style>
+  
+#dialogue{
 
+position:absolute;
+
+bottom:40px;
+left:50%;
+
+transform:translateX(-50%);
+
+padding:18px 28px;
+
+background:white;
+
+border:4px solid black;
+
+font-size:28px;
+
+color:black;
+
+display:none;
+
+z-index:500;
+
+max-width:900px;
+
+text-align:center;
+
+box-shadow:
+0 0 0 3px white;
+
+}
 body{
 margin:0;
 overflow:hidden;
@@ -110,7 +141,7 @@ Tiến nhập
 <div id="message">
 Mừng khách nhân tới Bình An Kinh
 </div>
-
+<div id="dialogue"></div>
 <canvas id="game"></canvas>
 
 <script src="/socket.io/socket.io.js"></script>
@@ -153,9 +184,44 @@ speed:1.2,
 state:"wander",
 
 waitTimer:0,
-teleportTimer:Date.now()
+teleportTimer:Date.now(),
+freezeUntil:0
 
 };
+
+const npcDialogues = [
+
+"thật trùng hợp, người cũng tới đây dạo chơi sao ?",
+
+"hì hì hì, người có muốn xem ảo thuật không ?",
+
+"kì tích thật xinh đẹp",
+
+"cứ coi như...ta là một kì tích đi",
+
+"hì hì hì"
+
+];
+
+function showDialogue(text){
+
+const box =
+document.getElementById("dialogue");
+
+box.innerHTML =
+"Âm dương sư : " + text;
+
+box.style.display = "block";
+
+clearTimeout(box.hideTimer);
+
+box.hideTimer = setTimeout(()=>{
+
+box.style.display = "none";
+
+},3000);
+
+}
 
 document.getElementById("enter").onclick = ()=>{
 
@@ -226,6 +292,38 @@ socket.emit("move","right");
 
 });
 
+canvas.addEventListener("click",(e)=>{
+
+const mx = e.clientX;
+const my = e.clientY;
+
+const nx = npc.x - camera.x;
+const ny = npc.y - camera.y;
+
+if(
+
+mx >= nx &&
+mx <= nx + 40 &&
+my >= ny &&
+my <= ny + 40
+
+){
+
+npc.freezeUntil = Date.now() + 3000;
+
+const randomDialogue =
+
+npcDialogues[
+Math.floor(
+Math.random()*npcDialogues.length
+)
+];
+
+showDialogue(randomDialogue);
+
+}
+
+});
 function drawTorii(x,y){
 
 ctx.fillStyle = "black";
@@ -457,7 +555,7 @@ const distTarget = Math.sqrt(
 dxTarget*dxTarget +
 dyTarget*dyTarget
 );
-
+  
 /* tới điểm đích -> chọn điểm mới */
 
 if(distTarget < 10){
@@ -474,15 +572,18 @@ dyTarget,
 dxTarget
 );
 
+if(Date.now() > npc.freezeUntil){
+
 npc.x += Math.cos(angleTarget)*npc.speed;
 npc.y += Math.sin(angleTarget)*npc.speed;
+
+}
 
 /* lâu lâu teleport */
 
 if(Date.now() - npc.teleportTimer > 20000){
 
 teleportNPC();
-
 }
 
 /* chỉ phản ứng nếu tình cờ ở gần */
