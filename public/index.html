@@ -31,7 +31,7 @@ font-size:40px;
 margin-bottom:20px;
 }
 
-input{
+iinput{
 padding:10px;
 width:300px;
 font-size:20px;
@@ -127,8 +127,8 @@ canvas.height = innerHeight;
 
 let players = {};
 let myId = null;
-let voidTimer = 0;
-const mapSize = 1000;
+
+const mapSize = 4000;
 
 const camera = {
 x:0,
@@ -240,48 +240,20 @@ block(x-20,y+40,240,15);
 
 function drawMap(){
 
-ctx.fillStyle = "black";
+ctx.fillStyle = "white";
 
 ctx.fillRect(0,0,canvas.width,canvas.height);
 
-const mapScreenX = -camera.x;
-const mapScreenY = -camera.y;
-
-ctx.fillStyle = "white";
-
-ctx.fillRect(
-mapScreenX,
-mapScreenY,
-mapSize,
-mapSize
-);
-
 ctx.fillStyle = "black";
 
 ctx.fillRect(
-470-camera.x,
+1970-camera.x,
 0-camera.y,
 60,
-793
+3300
 );
 
-ctx.strokeStyle = "white";
-
-ctx.lineWidth = 4;
-
-ctx.strokeRect(
-470-camera.x,
-0-camera.y,
-60,
-793
-);
-
-drawTorii(
-440-camera.x,
--camera.y
-);
-
-ctx.strokeStyle = "white";
+  ctx.strokeStyle = "white";
 
 ctx.lineWidth = 4;
 
@@ -298,6 +270,7 @@ drawTorii(
 );
 
 }
+
 function drawPlayers(){
 
 Object.values(players).forEach(p=>{
@@ -364,29 +337,29 @@ ctx.strokeRect(px,py,w,h);
 }
 
 block(
-440-camera.x,
-793-camera.y,
+1900-camera.x,
+3300-camera.y,
 20,
 200
 );
 
 block(
-620-camera.x,
-793-camera.y,
+2080-camera.x,
+3300-camera.y,
 20,
 200
 );
 
 block(
-400-camera.x,
-793-camera.y,
+1860-camera.x,
+3300-camera.y,
 280,
 20
 );
 
 block(
-420-camera.x,
-833-camera.y,
+1880-camera.x,
+3340-camera.y,
 240,
 15
 );
@@ -400,46 +373,19 @@ const me = players[myId];
 
 if(me){
 
-const inside =
-me.x >= 0 &&
-me.y >= 0 &&
-me.x <= mapSize &&
-me.y <= mapSize;
+camera.x = me.x-innerWidth/2;
 
-if(!inside){
-
-voidTimer++;
-
-}else{
-
-voidTimer = 0;
+camera.y = me.y-innerHeight/2;
 
 }
-
-if(voidTimer > 3600){
-
-me.x = 500;
-me.y = 950;
-
-voidTimer = 0;
-
-}
-
-camera.x = me.x - innerWidth/2;
-camera.y = me.y - innerHeight/2;
-
-}
-
-/* NPC */
-
 npc.teleportTimer++;
 
 if(npc.teleportTimer > 240){
 
 npc.teleportTimer = 0;
 
-npc.x = Math.random()*mapSize;
-npc.y = Math.random()*mapSize;
+npc.x = Math.random()*3900;
+npc.y = Math.random()*3900;
 
 }
 
@@ -473,56 +419,40 @@ if(dist < 500){
 
 const angle = Math.atan2(dy,dx);
 
-if(dist > 70){
+let speed = 3;
 
-npc.x += Math.cos(angle)*4;
-npc.y += Math.sin(angle)*4;
+if(dist < 120){
 
-}else if(dist > 45){
+speed = 1;
+}
 
-npc.x += Math.cos(angle)*1;
-npc.y += Math.sin(angle)*1;
+if(dist > 2){
+
+npc.x += Math.cos(angle)*speed;
+npc.y += Math.sin(angle)*speed;
+
+}
 
 }else{
 
-npc.waitTimer ??= 0;
+if(Math.random()<0.02){
 
-npc.waitTimer++;
-
-if(dist < 30 || npc.waitTimer > 600){
-
-npc.x = Math.random()*mapSize;
-npc.y = Math.random()*mapSize;
-
-npc.waitTimer = 0;
+npc.targetX = Math.random()*3900;
+npc.targetY = Math.random()*3900;
 
 }
 
-}
-
-}
-
-}
-
-/* wander */
-
-if(Math.random() < 0.02){
-
-npc.targetX = Math.random()*mapSize;
-npc.targetY = Math.random()*mapSize;
-
-}
-
-const dx2 = npc.targetX - npc.x;
-const dy2 = npc.targetY - npc.y;
+const dx2 = npc.targetX-npc.x;
+const dy2 = npc.targetY-npc.y;
 
 const angle2 = Math.atan2(dy2,dx2);
 
-npc.x += Math.cos(angle2)*1.5;
-npc.y += Math.sin(angle2)*1.5;
+npc.x += Math.cos(angle2)*5;
+npc.y += Math.sin(angle2)*5;
 
-/* DRAW */
+}
 
+}
 drawMap();
 
 drawPlayers();
