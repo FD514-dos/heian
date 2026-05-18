@@ -207,19 +207,21 @@ const spawnPoint = {
 x:2000,
 y:3850
 };
+const palaceCenter = mapSize / 2;
+
 const palace = {
 
-x:1460,
+x: palaceCenter - 640, 
 y:120,
 
-width:1000,
+width:1280,
 height:620,
 
-doorX:1930,
-doorY:520,
+doorX:0,
+doorY:0,
 
-doorW:140,
-doorH:100
+doorW:100,
+doorH:140
 
 };
 
@@ -499,8 +501,8 @@ pixelSize
 
 /* cửa thật để collision */
 
-palace.doorX = palace.x + 52*pixelSize;
-palace.doorY = palace.y + 32*pixelSize;
+palace.doorX = palaceCenter - (palace.doorW / 2);
+palace.doorY = palace.y + 320;
 palace.doorW = 10*pixelSize;
 palace.doorH = 14*pixelSize;
 
@@ -621,26 +623,15 @@ ctx.stroke();
 }
 const roadWidth = 80;
 
-const roadX =
-palace.doorX +
-palace.doorW/2 -
-roadWidth/2;
-
-/* đường từ đầu map */
-
-const roadTop = 0;
-
-/* dừng trước cửa cung */
-
-const roadBottom = palace.doorY + palace.doorH;
+const roadX = palaceCenter - roadWidth/2;
 
 ctx.fillStyle = "black";
 
 ctx.fillRect(
-roadX-camera.x,
-roadTop-camera.y,
+roadX - camera.x,
+0 - camera.y,
 roadWidth,
-roadBottom-roadTop
+mapSize
 );
 
 ctx.strokeStyle = "white";
@@ -648,15 +639,14 @@ ctx.strokeStyle = "white";
 ctx.lineWidth = 4;
 
 ctx.strokeRect(
-roadX-camera.x,
-roadTop-camera.y,
+roadX - camera.x,
+0 - camera.y,
 roadWidth,
-roadBottom-roadTop
+mapSize
 );
-
 drawTorii(
-1880-camera.x,
-3760-camera.y
+palaceCenter - 100 - camera.x,
+3760 - camera.y
 );
 drawPalace();
 }
@@ -728,34 +718,35 @@ ctx.strokeRect(px,py,w,h);
 
 }
 
+const toriiCenter = palaceCenter;
+
 block(
-1900-camera.x,
+toriiCenter - 100 - camera.x,
 3760-camera.y,
 20,
 200
 );
 
 block(
-2080-camera.x,
+toriiCenter + 80 - camera.x,
 3760-camera.y,
 20,
 200
 );
 
 block(
-1860-camera.x,
+toriiCenter - 140 - camera.x,
 3760-camera.y,
 280,
 20
 );
 
 block(
-1880-camera.x,
+toriiCenter - 120 - camera.x,
 3825-camera.y,
 240,
 15
 );
-
 }
   
 function teleportNPC(){
