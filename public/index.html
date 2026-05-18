@@ -441,34 +441,32 @@ const x = palace.x - camera.x;
 const y = palace.y - camera.y;
 
 /* ===================================================
-MÁI TẦNG 3
+MÁI SAU
 =================================================== */
 
 ctx.fillStyle = "black";
 ctx.strokeStyle = "white";
-ctx.lineWidth = 4;
+ctx.lineWidth = 3;
 
 ctx.beginPath();
 
-ctx.moveTo(x+120,y+110);
+ctx.moveTo(x+40,y+170);
 
-ctx.lineTo(x+230,y+40);
+ctx.quadraticCurveTo(
+x+400,
+y-80,
+x+760,
+y+170
+);
 
-ctx.lineTo(x+400,y-70);
+ctx.lineTo(x+670,y+170);
 
-ctx.lineTo(x+570,y+40);
-
-ctx.lineTo(x+680,y+110);
-
-ctx.lineTo(x+610,y+110);
-
-ctx.lineTo(x+520,y+75);
-
-ctx.lineTo(x+400,y+10);
-
-ctx.lineTo(x+280,y+75);
-
-ctx.lineTo(x+190,y+110);
+ctx.quadraticCurveTo(
+x+400,
+y+20,
+x+130,
+y+170
+);
 
 ctx.closePath();
 
@@ -476,7 +474,36 @@ ctx.fill();
 ctx.stroke();
 
 /* ===================================================
-TẦNG 3
+MÁI TRƯỚC
+=================================================== */
+
+ctx.beginPath();
+
+ctx.moveTo(x-20,y+260);
+
+ctx.quadraticCurveTo(
+x+400,
+y-20,
+x+820,
+y+260
+);
+
+ctx.lineTo(x+710,y+260);
+
+ctx.quadraticCurveTo(
+x+400,
+y+80,
+x+90,
+y+260
+);
+
+ctx.closePath();
+
+ctx.fill();
+ctx.stroke();
+
+/* ===================================================
+THÂN ĐIỆN
 =================================================== */
 
 ctx.fillStyle = "white";
@@ -484,73 +511,17 @@ ctx.strokeStyle = "black";
 ctx.lineWidth = 5;
 
 ctx.fillRect(
-x+210,
-y+110,
-380,
-90
+x+90,
+y+260,
+620,
+230
 );
 
 ctx.strokeRect(
-x+210,
-y+110,
-380,
-90
-);
-
-/* ===================================================
-MÁI TẦNG 2
-=================================================== */
-
-ctx.fillStyle = "black";
-ctx.strokeStyle = "white";
-
-ctx.beginPath();
-
-ctx.moveTo(x+40,y+230);
-
-ctx.lineTo(x+180,y+120);
-
-ctx.lineTo(x+400,y+20);
-
-ctx.lineTo(x+620,y+120);
-
-ctx.lineTo(x+760,y+230);
-
-ctx.lineTo(x+680,y+230);
-
-ctx.lineTo(x+560,y+185);
-
-ctx.lineTo(x+400,y+120);
-
-ctx.lineTo(x+240,y+185);
-
-ctx.lineTo(x+120,y+230);
-
-ctx.closePath();
-
-ctx.fill();
-ctx.stroke();
-
-/* ===================================================
-THÂN CHÍNH
-=================================================== */
-
-ctx.fillStyle = "white";
-ctx.strokeStyle = "black";
-ctx.lineWidth = 6;
-
-ctx.fillRect(
-x+80,
-y+230,
-640,
-250
-);
-
-ctx.strokeRect(
-x+80,
-y+230,
-640,
-250
+x+90,
+y+260,
+620,
+230
 );
 
 /* ===================================================
@@ -560,19 +531,19 @@ HIÊN
 ctx.fillStyle = "black";
 
 ctx.fillRect(
-x+50,
-y+455,
-700,
-35
+x+60,
+y+470,
+680,
+28
 );
 
 ctx.strokeStyle = "white";
 
 ctx.strokeRect(
-x+50,
-y+455,
-700,
-35
+x+60,
+y+470,
+680,
+28
 );
 
 /* ===================================================
@@ -581,71 +552,81 @@ CỘT
 
 for(let i=0;i<8;i++){
 
-const px = x + 110 + i*85;
+const px = x + 110 + i*82;
 
 ctx.fillStyle = "black";
 
 ctx.fillRect(
 px,
-y+220,
-18,
-270
+y+240,
+16,
+258
 );
 
 ctx.strokeStyle = "white";
 
 ctx.strokeRect(
 px,
-y+220,
-18,
-270
+y+240,
+16,
+258
 );
 
 }
 
 /* ===================================================
-CỬA SỔ
+CỬA KÉO
 =================================================== */
 
 for(let i=0;i<5;i++){
 
-const wx = x + 140 + i*110;
+const wx = x + 145 + i*95;
 
-ctx.fillStyle = "black";
+ctx.fillStyle = "white";
 
 ctx.fillRect(
 wx,
-y+290,
-55,
-55
+y+310,
+60,
+120
 );
 
-ctx.strokeStyle = "white";
+ctx.strokeStyle = "black";
+
+ctx.lineWidth = 3;
 
 ctx.strokeRect(
 wx,
-y+290,
-55,
-55
+y+310,
+60,
+120
 );
 
-/* nan cửa */
+/* nan cửa dọc */
+
+for(let j=1;j<4;j++){
 
 ctx.beginPath();
 
-ctx.moveTo(wx+18,y+290);
-ctx.lineTo(wx+18,y+345);
-
-ctx.moveTo(wx+36,y+290);
-ctx.lineTo(wx+36,y+345);
-
-ctx.moveTo(wx,y+308);
-ctx.lineTo(wx+55,y+308);
-
-ctx.moveTo(wx,y+326);
-ctx.lineTo(wx+55,y+326);
+ctx.moveTo(wx + j*15,y+310);
+ctx.lineTo(wx + j*15,y+430);
 
 ctx.stroke();
+
+}
+
+/* nan ngang */
+
+for(let j=1;j<5;j++){
+
+ctx.beginPath();
+
+ctx.moveTo(wx,y + j*24 + 310);
+ctx.lineTo(wx+60,y + j*24 + 310);
+
+ctx.stroke();
+
+}
 
 }
 
@@ -681,30 +662,31 @@ ctx.strokeStyle = "black";
 
 ctx.fillRect(
 x+320,
-y+480,
+y+490,
 160,
-40
+38
 );
 
 ctx.strokeRect(
 x+320,
-y+480,
+y+490,
 160,
-40
+38
 );
+
+for(let i=1;i<3;i++){
 
 ctx.beginPath();
 
-ctx.moveTo(x+320,y+493);
-ctx.lineTo(x+480,y+493);
-
-ctx.moveTo(x+320,y+506);
-ctx.lineTo(x+480,y+506);
+ctx.moveTo(x+320,y+490+i*12);
+ctx.lineTo(x+480,y+490+i*12);
 
 ctx.stroke();
 
+}
+
 /* ===================================================
-BIỂU TƯỢNG HOÀNG GIA
+BIỂU TƯỢNG
 =================================================== */
 
 ctx.fillStyle = "black";
@@ -713,8 +695,8 @@ ctx.beginPath();
 
 ctx.arc(
 x+400,
-y+255,
-24,
+y+285,
+18,
 0,
 Math.PI*2
 );
@@ -726,24 +708,24 @@ ctx.strokeStyle = "white";
 ctx.stroke();
 
 /* ===================================================
-TRANG TRÍ GÓC MÁI
+CHIDORI TRANG TRÍ MÁI
 =================================================== */
 
-function horn(px,py,flip){
+function roofHorn(px,py,dir){
 
 ctx.beginPath();
 
-if(flip){
+if(dir==="left"){
 
 ctx.moveTo(px,py);
-ctx.lineTo(px+18,py-12);
-ctx.lineTo(px+12,py+8);
+ctx.lineTo(px-22,py-14);
+ctx.lineTo(px-10,py+8);
 
 }else{
 
 ctx.moveTo(px,py);
-ctx.lineTo(px-18,py-12);
-ctx.lineTo(px-12,py+8);
+ctx.lineTo(px+22,py-14);
+ctx.lineTo(px+10,py+8);
 
 }
 
@@ -756,11 +738,11 @@ ctx.stroke();
 
 ctx.fillStyle = "black";
 
-horn(x+40,y+230,false);
-horn(x+760,y+230,true);
+roofHorn(x-20,y+260,"left");
+roofHorn(x+820,y+260,"right");
 
-horn(x+120,y+110,false);
-horn(x+680,y+110,true);
+roofHorn(x+40,y+170,"left");
+roofHorn(x+760,y+170,"right");
 
 }
 
