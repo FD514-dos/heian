@@ -441,31 +441,35 @@ const x = palace.x - camera.x;
 const y = palace.y - camera.y;
 
 /* ===================================================
-MÁI SAU
+MÀU
 =================================================== */
 
 ctx.fillStyle = "black";
 ctx.strokeStyle = "white";
 ctx.lineWidth = 3;
 
+/* ===================================================
+MÁI SAU (TẦNG 2)
+=================================================== */
+
 ctx.beginPath();
 
-ctx.moveTo(x+40,y+170);
+ctx.moveTo(x+120,y+120);
 
 ctx.quadraticCurveTo(
 x+400,
-y-80,
-x+760,
-y+170
+y-90,
+x+680,
+y+120
 );
 
-ctx.lineTo(x+670,y+170);
+ctx.lineTo(x+620,y+120);
 
 ctx.quadraticCurveTo(
 x+400,
-y+20,
-x+130,
-y+170
+y-20,
+x+180,
+y+120
 );
 
 ctx.closePath();
@@ -473,28 +477,122 @@ ctx.closePath();
 ctx.fill();
 ctx.stroke();
 
+/* viền mái */
+
+ctx.beginPath();
+
+ctx.moveTo(x+170,y+118);
+
+ctx.quadraticCurveTo(
+x+400,
+y-35,
+x+630,
+y+118
+);
+
+ctx.stroke();
+
+/* ===================================================
+THANH DƯỚI MÁI SAU
+=================================================== */
+
+ctx.fillRect(
+x+140,
+y+120,
+520,
+26
+);
+
+ctx.strokeRect(
+x+140,
+y+120,
+520,
+26
+);
+
+/* ô trắng nhỏ */
+
+for(let i=0;i<10;i++){
+
+ctx.fillStyle = "white";
+
+ctx.fillRect(
+x+155+i*50,
+y+126,
+28,
+12
+);
+
+}
+
+ctx.fillStyle = "black";
+
 /* ===================================================
 MÁI TRƯỚC
 =================================================== */
 
 ctx.beginPath();
 
-ctx.moveTo(x-20,y+260);
+ctx.moveTo(x+20,y+240);
 
 ctx.quadraticCurveTo(
 x+400,
 y-20,
-x+820,
-y+260
+x+780,
+y+240
 );
 
-ctx.lineTo(x+710,y+260);
+ctx.lineTo(x+690,y+240);
 
 ctx.quadraticCurveTo(
 x+400,
-y+80,
-x+90,
-y+260
+y+90,
+x+110,
+y+240
+);
+
+ctx.closePath();
+
+ctx.fill();
+ctx.stroke();
+
+/* viền mái */
+
+ctx.beginPath();
+
+ctx.moveTo(x+90,y+238);
+
+ctx.quadraticCurveTo(
+x+400,
+y+60,
+x+710,
+y+238
+);
+
+ctx.stroke();
+
+/* ===================================================
+MÁI NHỎ GIỮA
+=================================================== */
+
+ctx.beginPath();
+
+ctx.moveTo(x+280,y+250);
+
+ctx.quadraticCurveTo(
+x+400,
+y+140,
+x+520,
+y+250
+);
+
+ctx.lineTo(x+470,y+250);
+
+ctx.quadraticCurveTo(
+x+400,
+y+190,
+x+330,
+y+250
 );
 
 ctx.closePath();
@@ -511,38 +609,38 @@ ctx.strokeStyle = "black";
 ctx.lineWidth = 5;
 
 ctx.fillRect(
-x+90,
-y+260,
-620,
-230
+x+80,
+y+240,
+640,
+250
 );
 
 ctx.strokeRect(
-x+90,
-y+260,
-620,
-230
+x+80,
+y+240,
+640,
+250
 );
 
 /* ===================================================
-HIÊN
+NỀN ĐEN DƯỚI
 =================================================== */
 
 ctx.fillStyle = "black";
 
 ctx.fillRect(
-x+60,
+x+50,
 y+470,
-680,
+700,
 28
 );
 
 ctx.strokeStyle = "white";
 
 ctx.strokeRect(
-x+60,
+x+50,
 y+470,
-680,
+700,
 28
 );
 
@@ -552,81 +650,64 @@ CỘT
 
 for(let i=0;i<8;i++){
 
-const px = x + 110 + i*82;
+const px = x + 110 + i*78;
 
 ctx.fillStyle = "black";
 
 ctx.fillRect(
 px,
-y+240,
-16,
-258
+y+220,
+18,
+278
 );
 
 ctx.strokeStyle = "white";
 
 ctx.strokeRect(
 px,
-y+240,
-16,
-258
+y+220,
+18,
+278
 );
 
 }
 
 /* ===================================================
-CỬA KÉO
+CỬA SỔ
 =================================================== */
 
-for(let i=0;i<5;i++){
+for(let i=0;i<4;i++){
 
-const wx = x + 145 + i*95;
+const wx = x + 160 + i*120;
 
-ctx.fillStyle = "white";
+ctx.fillStyle = "black";
 
 ctx.fillRect(
 wx,
-y+310,
+y+315,
 60,
-120
+60
 );
 
-ctx.strokeStyle = "black";
-
-ctx.lineWidth = 3;
+ctx.strokeStyle = "white";
 
 ctx.strokeRect(
 wx,
-y+310,
+y+315,
 60,
-120
+60
 );
 
-/* nan cửa dọc */
+/* pixel viền trong */
 
-for(let j=1;j<4;j++){
+ctx.strokeStyle = "black";
 
-ctx.beginPath();
-
-ctx.moveTo(wx + j*15,y+310);
-ctx.lineTo(wx + j*15,y+430);
-
-ctx.stroke();
-
-}
-
-/* nan ngang */
-
-for(let j=1;j<5;j++){
-
-ctx.beginPath();
-
-ctx.moveTo(wx,y + j*24 + 310);
-ctx.lineTo(wx+60,y + j*24 + 310);
-
-ctx.stroke();
-
-}
+ctx.strokeRect(
+wx+8,
+y+323,
+44,
+44
+);
 
 }
 
@@ -637,20 +718,29 @@ CỬA CHÍNH
 ctx.fillStyle = "black";
 
 ctx.fillRect(
-palace.doorX-camera.x,
-palace.doorY-camera.y,
-palace.doorW,
-palace.doorH
+x+340,
+y+290,
+120,
+170
 );
 
 ctx.strokeStyle = "white";
 ctx.lineWidth = 4;
 
 ctx.strokeRect(
-palace.doorX-camera.x,
-palace.doorY-camera.y,
-palace.doorW,
-palace.doorH
+x+340,
+y+290,
+120,
+170
+);
+
+/* viền trong */
+
+ctx.strokeRect(
+x+355,
+y+305,
+90,
+140
 );
 
 /* ===================================================
@@ -664,22 +754,22 @@ ctx.fillRect(
 x+320,
 y+490,
 160,
-38
+40
 );
 
 ctx.strokeRect(
 x+320,
 y+490,
 160,
-38
+40
 );
 
 for(let i=1;i<3;i++){
 
 ctx.beginPath();
 
-ctx.moveTo(x+320,y+490+i*12);
-ctx.lineTo(x+480,y+490+i*12);
+ctx.moveTo(x+320,y+490+i*13);
+ctx.lineTo(x+480,y+490+i*13);
 
 ctx.stroke();
 
@@ -695,8 +785,8 @@ ctx.beginPath();
 
 ctx.arc(
 x+400,
-y+285,
-18,
+y+260,
+20,
 0,
 Math.PI*2
 );
@@ -708,23 +798,25 @@ ctx.strokeStyle = "white";
 ctx.stroke();
 
 /* ===================================================
-CHIDORI TRANG TRÍ MÁI
+ĐẦU MÁI CONG
 =================================================== */
 
-function roofHorn(px,py,dir){
+function horn(px,py,dir){
+
+ctx.fillStyle = "black";
 
 ctx.beginPath();
 
 if(dir==="left"){
 
 ctx.moveTo(px,py);
-ctx.lineTo(px-22,py-14);
+ctx.lineTo(px-24,py-18);
 ctx.lineTo(px-10,py+8);
 
 }else{
 
 ctx.moveTo(px,py);
-ctx.lineTo(px+22,py-14);
+ctx.lineTo(px+24,py-18);
 ctx.lineTo(px+10,py+8);
 
 }
@@ -732,17 +824,18 @@ ctx.lineTo(px+10,py+8);
 ctx.closePath();
 
 ctx.fill();
+
+ctx.strokeStyle = "white";
+
 ctx.stroke();
 
 }
 
-ctx.fillStyle = "black";
+horn(x+20,y+240,"left");
+horn(x+780,y+240,"right");
 
-roofHorn(x-20,y+260,"left");
-roofHorn(x+820,y+260,"right");
-
-roofHorn(x+40,y+170,"left");
-roofHorn(x+760,y+170,"right");
+horn(x+120,y+120,"left");
+horn(x+680,y+120,"right");
 
 }
 
