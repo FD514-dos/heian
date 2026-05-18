@@ -776,7 +776,46 @@ ctx.fillRect(
 mapSize,
 mapSize
 );
+/* cỏ */
 
+for(let gx = 0; gx < mapSize; gx += 80){
+
+for(let gy = 0; gy < mapSize; gy += 80){
+
+const sx = gx - camera.x;
+const sy = gy - camera.y;
+
+/* bỏ qua ngoài màn hình để đỡ lag */
+
+if(
+sx < -80 ||
+sy < -80 ||
+sx > canvas.width + 80 ||
+sy > canvas.height + 80
+){
+continue;
+}
+
+/* cụm cỏ */
+
+ctx.strokeStyle = "black";
+ctx.lineWidth = 2;
+
+ctx.beginPath();
+
+ctx.moveTo(sx+20, sy+50);
+ctx.lineTo(sx+25, sy+35);
+
+ctx.moveTo(sx+25, sy+50);
+ctx.lineTo(sx+30, sy+30);
+
+ctx.moveTo(sx+30, sy+50);
+ctx.lineTo(sx+35, sy+37);
+
+ctx.stroke();
+
+}
+}
 /* map 2 */
 
 ctx.fillStyle = "black";
