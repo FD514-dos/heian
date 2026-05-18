@@ -170,7 +170,30 @@ const spawnPoint = {
 x:2000,
 y:3850
 };
+const palace = {
 
+x:1600,
+y:120,
+
+width:800,
+height:500,
+
+doorX:1930,
+doorY:520,
+
+doorW:140,
+doorH:100
+
+};
+
+const map2Spawn = {
+
+x:2000,
+y:3500
+
+};
+
+let currentMap = 1;
 const npc = {
 
 x:Math.random()*3900,
@@ -346,9 +369,376 @@ block(x-40,y,280,20);
 block(x-20,y+40,240,15);
 
 }
+function drawPalace(){
+
+const x = palace.x - camera.x;
+const y = palace.y - camera.y;
+
+/* ===================================================
+MÁI TẦNG 3
+=================================================== */
+
+ctx.fillStyle = "black";
+ctx.strokeStyle = "white";
+ctx.lineWidth = 4;
+
+ctx.beginPath();
+
+ctx.moveTo(x+120,y+110);
+
+ctx.lineTo(x+230,y+40);
+
+ctx.lineTo(x+400,y-70);
+
+ctx.lineTo(x+570,y+40);
+
+ctx.lineTo(x+680,y+110);
+
+ctx.lineTo(x+610,y+110);
+
+ctx.lineTo(x+520,y+75);
+
+ctx.lineTo(x+400,y+10);
+
+ctx.lineTo(x+280,y+75);
+
+ctx.lineTo(x+190,y+110);
+
+ctx.closePath();
+
+ctx.fill();
+ctx.stroke();
+
+/* ===================================================
+TẦNG 3
+=================================================== */
+
+ctx.fillStyle = "white";
+ctx.strokeStyle = "black";
+ctx.lineWidth = 5;
+
+ctx.fillRect(
+x+210,
+y+110,
+380,
+90
+);
+
+ctx.strokeRect(
+x+210,
+y+110,
+380,
+90
+);
+
+/* ===================================================
+MÁI TẦNG 2
+=================================================== */
+
+ctx.fillStyle = "black";
+ctx.strokeStyle = "white";
+
+ctx.beginPath();
+
+ctx.moveTo(x+40,y+230);
+
+ctx.lineTo(x+180,y+120);
+
+ctx.lineTo(x+400,y+20);
+
+ctx.lineTo(x+620,y+120);
+
+ctx.lineTo(x+760,y+230);
+
+ctx.lineTo(x+680,y+230);
+
+ctx.lineTo(x+560,y+185);
+
+ctx.lineTo(x+400,y+120);
+
+ctx.lineTo(x+240,y+185);
+
+ctx.lineTo(x+120,y+230);
+
+ctx.closePath();
+
+ctx.fill();
+ctx.stroke();
+
+/* ===================================================
+THÂN CHÍNH
+=================================================== */
+
+ctx.fillStyle = "white";
+ctx.strokeStyle = "black";
+ctx.lineWidth = 6;
+
+ctx.fillRect(
+x+80,
+y+230,
+640,
+250
+);
+
+ctx.strokeRect(
+x+80,
+y+230,
+640,
+250
+);
+
+/* ===================================================
+HIÊN
+=================================================== */
+
+ctx.fillStyle = "black";
+
+ctx.fillRect(
+x+50,
+y+455,
+700,
+35
+);
+
+ctx.strokeStyle = "white";
+
+ctx.strokeRect(
+x+50,
+y+455,
+700,
+35
+);
+
+/* ===================================================
+CỘT
+=================================================== */
+
+for(let i=0;i<8;i++){
+
+const px = x + 110 + i*85;
+
+ctx.fillStyle = "black";
+
+ctx.fillRect(
+px,
+y+220,
+18,
+270
+);
+
+ctx.strokeStyle = "white";
+
+ctx.strokeRect(
+px,
+y+220,
+18,
+270
+);
+
+}
+
+/* ===================================================
+CỬA SỔ
+=================================================== */
+
+for(let i=0;i<5;i++){
+
+const wx = x + 140 + i*110;
+
+ctx.fillStyle = "black";
+
+ctx.fillRect(
+wx,
+y+290,
+55,
+55
+);
+
+ctx.strokeStyle = "white";
+
+ctx.strokeRect(
+wx,
+y+290,
+55,
+55
+);
+
+/* nan cửa */
+
+ctx.beginPath();
+
+ctx.moveTo(wx+18,y+290);
+ctx.lineTo(wx+18,y+345);
+
+ctx.moveTo(wx+36,y+290);
+ctx.lineTo(wx+36,y+345);
+
+ctx.moveTo(wx,y+308);
+ctx.lineTo(wx+55,y+308);
+
+ctx.moveTo(wx,y+326);
+ctx.lineTo(wx+55,y+326);
+
+ctx.stroke();
+
+}
+
+/* ===================================================
+CỬA CHÍNH
+=================================================== */
+
+ctx.fillStyle = "black";
+
+ctx.fillRect(
+palace.doorX-camera.x,
+palace.doorY-camera.y,
+palace.doorW,
+palace.doorH
+);
+
+ctx.strokeStyle = "white";
+ctx.lineWidth = 4;
+
+ctx.strokeRect(
+palace.doorX-camera.x,
+palace.doorY-camera.y,
+palace.doorW,
+palace.doorH
+);
+
+/* ===================================================
+BẬC THANG
+=================================================== */
+
+ctx.fillStyle = "white";
+ctx.strokeStyle = "black";
+
+ctx.fillRect(
+x+320,
+y+480,
+160,
+40
+);
+
+ctx.strokeRect(
+x+320,
+y+480,
+160,
+40
+);
+
+ctx.beginPath();
+
+ctx.moveTo(x+320,y+493);
+ctx.lineTo(x+480,y+493);
+
+ctx.moveTo(x+320,y+506);
+ctx.lineTo(x+480,y+506);
+
+ctx.stroke();
+
+/* ===================================================
+BIỂU TƯỢNG HOÀNG GIA
+=================================================== */
+
+ctx.fillStyle = "black";
+
+ctx.beginPath();
+
+ctx.arc(
+x+400,
+y+255,
+24,
+0,
+Math.PI*2
+);
+
+ctx.fill();
+
+ctx.strokeStyle = "white";
+
+ctx.stroke();
+
+/* ===================================================
+TRANG TRÍ GÓC MÁI
+=================================================== */
+
+function horn(px,py,flip){
+
+ctx.beginPath();
+
+if(flip){
+
+ctx.moveTo(px,py);
+ctx.lineTo(px+18,py-12);
+ctx.lineTo(px+12,py+8);
+
+}else{
+
+ctx.moveTo(px,py);
+ctx.lineTo(px-18,py-12);
+ctx.lineTo(px-12,py+8);
+
+}
+
+ctx.closePath();
+
+ctx.fill();
+ctx.stroke();
+
+}
+
+ctx.fillStyle = "black";
+
+horn(x+40,y+230,false);
+horn(x+760,y+230,true);
+
+horn(x+120,y+110,false);
+horn(x+680,y+110,true);
+
+}
+
 
 function drawMap(){
+if(currentMap === 2){
 
+ctx.fillStyle = "black";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle = "white";
+
+ctx.fillRect(
+0-camera.x,
+0-camera.y,
+mapSize,
+mapSize
+);
+
+/* map 2 */
+
+ctx.fillStyle = "black";
+
+ctx.fillRect(
+1500-camera.x,
+1500-camera.y,
+1000,
+1000
+);
+
+ctx.strokeStyle = "white";
+
+ctx.lineWidth = 6;
+
+ctx.strokeRect(
+1500-camera.x,
+1500-camera.y,
+1000,
+1000
+);
+
+return;
+
+}
 ctx.fillStyle = "black";
 ctx.fillRect(0,0,canvas.width,canvas.height);
 
@@ -388,7 +778,7 @@ drawTorii(
 1900-camera.x,
 3760-camera.y
 );
-
+drawPalace();
 }
 
 function drawPlayers(){
@@ -487,7 +877,28 @@ block(
 );
 
 }
+function drawPalaceFrontLayer(){
 
+ctx.fillStyle = "white";
+ctx.strokeStyle = "black";
+
+ctx.lineWidth = 5;
+
+ctx.fillRect(
+palace.x-camera.x,
+palace.y-camera.y+250,
+palace.width,
+250
+);
+
+ctx.strokeRect(
+palace.x-camera.x,
+palace.y-camera.y+250,
+palace.width,
+250
+);
+
+}
 function teleportNPC(){
 
 npc.x = Math.random()*3900;
@@ -510,7 +921,58 @@ requestAnimationFrame(loop);
 const me = players[myId];
 
 if(me){
+/* collision cung điện */
 
+if(
+
+me.x + 40 > palace.x &&
+me.x < palace.x + palace.width &&
+me.y + 40 > palace.y &&
+me.y < palace.y + palace.height
+
+){
+
+const insideDoor =
+
+me.x + 40 > palace.doorX &&
+me.x < palace.doorX + palace.doorW &&
+me.y + 40 > palace.doorY &&
+me.y < palace.doorY + palace.doorH;
+
+if(!insideDoor){
+
+if(me.y < palace.y + 250){
+
+me.y = palace.y - 40;
+
+}else{
+
+me.y = palace.y + palace.height;
+
+}
+
+}
+
+}
+  /* vào map 2 */
+
+if(
+
+currentMap === 1 &&
+
+me.x + 40 > palace.doorX &&
+me.x < palace.doorX + palace.doorW &&
+me.y + 40 > palace.doorY &&
+me.y < palace.doorY + palace.doorH
+
+){
+
+currentMap = 2;
+
+me.x = map2Spawn.x;
+me.y = map2Spawn.y;
+
+}
 camera.x = me.x-innerWidth/2;
 camera.y = me.y-innerHeight/2;
 
@@ -627,6 +1089,18 @@ drawMap();
 drawPlayers();
 
 drawFrontLayer();
+
+/* che người chơi sau cung điện */
+
+if(me){
+
+if(me.y > palace.y + 250){
+
+drawPalaceFrontLayer();
+
+}
+
+}
 
 }
 
