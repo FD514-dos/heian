@@ -187,7 +187,11 @@ const ctx = canvas.getContext("2d");
 
 canvas.width = innerWidth;
 canvas.height = innerHeight;
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
+if(isMobile){
+document.getElementById("mobile-controls").style.display = "block";
+}
 let players = {};
 let myId = null;
 
