@@ -231,6 +231,9 @@ y:3500
 };
 
 let currentMap = 1;
+let transition = 0;
+let transitionText = "";
+  let isTransitioning = false;
 const npc = {
 
 x:Math.random()*3900,
@@ -813,7 +816,31 @@ ctx.fillRect(
 mapSize,
 mapSize
 );
+/* cỏ */
 
+ctx.fillStyle = "#dfe8d8";
+
+for(let x=0;x<mapSize;x+=40){
+
+for(let y=0;y<mapSize;y+=40){
+
+ctx.fillRect(
+x-camera.x,
+y-camera.y,
+20,
+4
+);
+
+ctx.fillRect(
+x-camera.x+10,
+y-camera.y+10,
+4,
+20
+);
+
+}
+
+}
 const roadX = 1970;
 const roadY = 0;
 
@@ -1024,6 +1051,7 @@ me.y = palace.y + palace.height;
 if(
 
 currentMap === 1 &&
+!isTransitioning &&
 
 me.x + 40 > palace.doorX &&
 me.x < palace.doorX + palace.doorW &&
@@ -1032,15 +1060,43 @@ me.y < palace.doorY + palace.doorH
 
 ){
 
+isTransitioning = true;
+
+transition = 1;
+transitionText = "Hoàng Cung";
+
+setTimeout(()=>{
+
 currentMap = 2;
 
 me.x = map2Spawn.x;
 me.y = map2Spawn.y;
 
+isTransitioning = false;
+
+},800);
+
 }
 camera.x = me.x-innerWidth/2;
 camera.y = me.y-innerHeight/2;
+/* quay lại map 1 */
 
+if(
+
+currentMap === 2 &&
+
+me.x > 1900 &&
+me.x < 2100 &&
+me.y > 3900
+
+){
+
+currentMap = 1;
+
+me.x = 2000;
+me.y = 700;
+
+}
 /* vùng đen vô tận */
 
 if(
@@ -1166,7 +1222,41 @@ drawPalaceFrontLayer();
 }
 
 }
+/* transition */
 
+if(transition > 0){
+
+ctx.fillStyle =
+"rgba(0,0,0,"+transition+")";
+
+ctx.fillRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+ctx.fillStyle = "white";
+
+ctx.font = "60px serif";
+
+ctx.textAlign = "center";
+
+ctx.fillText(
+transitionText,
+canvas.width/2,
+canvas.height/2
+);
+
+transition -= 0.02;
+
+if(transition < 0){
+
+transition = 0;
+
+}
+
+}
 }
 
 </script>
