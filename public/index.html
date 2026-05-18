@@ -776,6 +776,44 @@ ctx.fillRect(
 mapSize,
 mapSize
 );
+
+}
+/* map 2 */
+
+ctx.fillStyle = "black";
+
+ctx.fillRect(
+1500-camera.x,
+1500-camera.y,
+1000,
+1000
+);
+
+ctx.strokeStyle = "white";
+
+ctx.lineWidth = 6;
+
+ctx.strokeRect(
+1500-camera.x,
+1500-camera.y,
+1000,
+1000
+);
+
+return;
+
+}
+ctx.fillStyle = "black";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle = "white";
+
+ctx.fillRect(
+0-camera.x,
+0-camera.y,
+mapSize,
+mapSize
+);
 /* cỏ */
 
 for(let gx = 0; gx < mapSize; gx += 80){
@@ -815,44 +853,6 @@ ctx.lineTo(sx+35, sy+37);
 ctx.stroke();
 
 }
-}
-/* map 2 */
-
-ctx.fillStyle = "black";
-
-ctx.fillRect(
-1500-camera.x,
-1500-camera.y,
-1000,
-1000
-);
-
-ctx.strokeStyle = "white";
-
-ctx.lineWidth = 6;
-
-ctx.strokeRect(
-1500-camera.x,
-1500-camera.y,
-1000,
-1000
-);
-
-return;
-
-}
-ctx.fillStyle = "black";
-ctx.fillRect(0,0,canvas.width,canvas.height);
-
-ctx.fillStyle = "white";
-
-ctx.fillRect(
-0-camera.x,
-0-camera.y,
-mapSize,
-mapSize
-);
-
 const roadX = 1970;
 const roadY = 0;
 
