@@ -209,7 +209,7 @@ y:3850
 };
 const palace = {
 
-x:1500,
+x:1460,
 y:120,
 
 width:1000,
@@ -621,28 +621,26 @@ ctx.stroke();
 }
 const roadWidth = 80;
 
-/* canh giữa cửa cung */
-
 const roadX =
 palace.doorX +
 palace.doorW/2 -
 roadWidth/2;
 
-/* bắt đầu từ torii */
+/* đường từ đầu map */
 
-const roadStartY = 3780;
+const roadTop = 0;
 
-/* kết thúc trước cửa cung */
+/* dừng trước cửa cung */
 
-const roadEndY = palace.doorY + palace.doorH;
+const roadBottom = palace.doorY + palace.doorH;
 
 ctx.fillStyle = "black";
 
 ctx.fillRect(
 roadX-camera.x,
-roadEndY-camera.y,
+roadTop-camera.y,
 roadWidth,
-roadStartY-roadEndY
+roadBottom-roadTop
 );
 
 ctx.strokeStyle = "white";
@@ -651,13 +649,13 @@ ctx.lineWidth = 4;
 
 ctx.strokeRect(
 roadX-camera.x,
-roadEndY-camera.y,
+roadTop-camera.y,
 roadWidth,
-roadStartY-roadEndY
+roadBottom-roadTop
 );
 
 drawTorii(
-1900-camera.x,
+1880-camera.x,
 3760-camera.y
 );
 drawPalace();
