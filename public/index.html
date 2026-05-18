@@ -816,29 +816,66 @@ ctx.fillRect(
 mapSize,
 mapSize
 );
-/* cỏ */
+/* cỏ random */
 
-ctx.fillStyle = "#dfe8d8";
+ctx.strokeStyle = "black";
 
-for(let x=0;x<mapSize;x+=40){
+ctx.lineWidth = 1.2;
 
-for(let y=0;y<mapSize;y+=40){
+for(let i=0;i<700;i++){
 
-ctx.fillRect(
-x-camera.x,
-y-camera.y,
-20,
-4
-);
+const gx =
+(i * 137) % mapSize;
 
-ctx.fillRect(
-x-camera.x+10,
-y-camera.y+10,
-4,
-20
-);
+const gy =
+(i * 83) % mapSize;
 
+/* tránh mọc trên đường */
+
+if(
+gx > 1900 &&
+gx < 2100
+){
+continue;
 }
+
+const x = gx - camera.x;
+const y = gy - camera.y;
+
+/* random nhẹ */
+
+const sway =
+Math.sin((gx+gy)*0.01)*2;
+
+/* lá giữa */
+
+ctx.beginPath();
+
+ctx.moveTo(x,y+6);
+
+ctx.lineTo(x+sway,y-4);
+
+ctx.stroke();
+
+/* lá trái */
+
+ctx.beginPath();
+
+ctx.moveTo(x,y+6);
+
+ctx.lineTo(x-4+sway,y);
+
+ctx.stroke();
+
+/* lá phải */
+
+ctx.beginPath();
+
+ctx.moveTo(x,y+6);
+
+ctx.lineTo(x+4+sway,y);
+
+ctx.stroke();
 
 }
 const roadX = 1970;
