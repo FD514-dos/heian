@@ -499,7 +499,7 @@ pixelSize
 
 /* cửa thật để collision */
 
-palace.doorX = palace.x + 45*pixelSize;
+palace.doorX = palace.x + 52*pixelSize;
 palace.doorY = palace.y + 32*pixelSize;
 palace.doorW = 10*pixelSize;
 palace.doorH = 14*pixelSize;
@@ -619,16 +619,30 @@ ctx.lineTo(x+4+sway,y);
 ctx.stroke();
 
 }
-const roadX = 1960;
-const roadY = 0;
+const roadWidth = 80;
+
+/* canh giữa cửa cung */
+
+const roadX =
+palace.doorX +
+palace.doorW/2 -
+roadWidth/2;
+
+/* bắt đầu từ torii */
+
+const roadStartY = 3780;
+
+/* kết thúc trước cửa cung */
+
+const roadEndY = palace.doorY + palace.doorH;
 
 ctx.fillStyle = "black";
 
 ctx.fillRect(
 roadX-camera.x,
-roadY-camera.y,
-60,
-3650
+roadEndY-camera.y,
+roadWidth,
+roadStartY-roadEndY
 );
 
 ctx.strokeStyle = "white";
@@ -637,9 +651,9 @@ ctx.lineWidth = 4;
 
 ctx.strokeRect(
 roadX-camera.x,
-roadY-camera.y,
-60,
-3650
+roadEndY-camera.y,
+roadWidth,
+roadStartY-roadEndY
 );
 
 drawTorii(
