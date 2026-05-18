@@ -209,7 +209,7 @@ y:3850
 };
 const palace = {
 
-x:1600,
+x:0,
 y:120,
 
 width:800,
@@ -621,6 +621,7 @@ ctx.stroke();
 }
 const roadX = 1970;
 const roadY = 0;
+  const roadHeight = palace.y + 300;
 
 ctx.fillStyle = "black";
 
@@ -628,7 +629,7 @@ ctx.fillRect(
 roadX-camera.x,
 roadY-camera.y,
 60,
-4000
+roadHeight
 );
 
 ctx.strokeStyle = "white";
@@ -639,7 +640,7 @@ ctx.strokeRect(
 roadX-camera.x,
 roadY-camera.y,
 60,
-4000
+roadHeight
 );
 
 drawTorii(
