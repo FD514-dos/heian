@@ -1005,29 +1005,6 @@ block(
 
 }
   
-function drawPalaceFrontLayer(){
-
-ctx.fillStyle = "white";
-ctx.strokeStyle = "black";
-
-ctx.lineWidth = 5;
-
-ctx.fillRect(
-palace.x-camera.x,
-palace.y-camera.y+250,
-palace.width,
-250
-);
-
-ctx.strokeRect(
-palace.x-camera.x,
-palace.y-camera.y+250,
-palace.width,
-250
-);
-}
-
-
 function teleportNPC(){
 
 npc.x = Math.random()*3900;
@@ -1248,17 +1225,6 @@ drawPlayers();
 
 drawFrontLayer();
 
-/* che người chơi sau cung điện */
-
-if(me){
-if(me.y > palace.y + 330){
-
-
-drawPalaceFrontLayer();
-
-}
-
-}
 /* transition */
 
 if(transition > 0){
