@@ -193,6 +193,28 @@ const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 if(isMobile){
 document.getElementById("mobile-controls").style.display = "block";
 }
+const sprites = {};
+
+const characterSprites = {
+
+"Fyodor Dostoyevsky Ori":"fyodorori.png",
+"Fyodor Dostoyevsky DA":"fyodorda.png",
+"Dazai Osamu Beast":"dazaibeast.png",
+"Oda Sakunosuke":"oda.png",
+"Kouyou Ozaki":"kouyou.png"
+
+};
+
+for(const name in characterSprites){
+
+const img = new Image();
+
+img.src =
+"/sprites/" + characterSprites[name];
+
+sprites[name] = img;
+
+}
 let players = {};
 let myId = null;
 
@@ -658,13 +680,26 @@ Object.values(players).forEach(p=>{
 const x = p.x-camera.x;
 const y = p.y-camera.y;
 
-ctx.fillStyle = "white";
+const sprite = sprites[p.name];
 
+if(sprite){
+
+ctx.imageSmoothingEnabled = false;
+
+ctx.drawImage(
+sprite,
+x,
+y,
+64,
+64
+);
+
+}else{
+
+ctx.fillStyle = "white";
 ctx.fillRect(x,y,40,40);
 
-ctx.strokeStyle = "black";
-
-ctx.strokeRect(x,y,40,40);
+}
 
 ctx.font = "18px serif";
 
