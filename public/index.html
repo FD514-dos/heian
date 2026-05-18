@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -350,7 +351,33 @@ if(e.key==="ArrowRight")
 socket.emit("move","right");
 
 });
+function sendMove(dir){
+socket.emit("move", dir);
+}
 
+function bindBtn(cls, dir){
+const el = document.querySelector("#mobile-controls ." + cls);
+
+let interval = null;
+
+el.addEventListener("touchstart", (e)=>{
+e.preventDefault();
+sendMove(dir);
+
+interval = setInterval(()=>{
+sendMove(dir);
+},120);
+});
+
+el.addEventListener("touchend", ()=>{
+clearInterval(interval);
+});
+}
+
+bindBtn("up","up");
+bindBtn("down","down");
+bindBtn("left","left");
+bindBtn("right","right");
 canvas.addEventListener("click",(e)=>{
 
 const mx = e.clientX;
