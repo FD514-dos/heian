@@ -117,21 +117,6 @@ z-index:999;
 canvas{
 display:none;
 }
-  #transition{
-position:absolute;
-width:100%;
-height:100%;
-background:black;
-opacity:0;
-display:flex;
-justify-content:center;
-align-items:center;
-color:white;
-font-size:60px;
-z-index:998;
-pointer-events:none;
-transition:opacity 1s;
-}
 #mobile-controls{
 position:absolute;
 bottom:20px;
@@ -1036,31 +1021,15 @@ me.y = palace.y + palace.height;
 }
   /* vào map 2 */
 
+if(
 
-const transition = document.getElementById("transition");
+currentMap === 1 &&
 
-if(currentMap === 1 &&
-   me.x + 40 > palace.doorX &&
-   me.x < palace.doorX + palace.doorW &&
-   me.y + 40 > palace.doorY &&
-   me.y < palace.doorY + palace.doorH
-){
-    transition.innerText = "HOÀNG CUNG";
+me.x + 40 > palace.doorX &&
+me.x < palace.doorX + palace.doorW &&
+me.y + 40 > palace.doorY &&
+me.y < palace.doorY + palace.doorH
 
-    transition.style.opacity = 1;
-
-    setTimeout(()=>{
-        currentMap = 2;
-
-        me.x = map2Spawn.x;
-        me.y = map2Spawn.y;
-
-        setTimeout(()=>{
-            transition.style.opacity = 0;
-        },500);
-
-    },800);
-}
 ){
 
 currentMap = 2;
